@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"cicdgf/internal/logic/common"
-	"cicdgf/internal/service"
 	"fmt"
+	"gojob/internal/logic/common"
+	"gojob/internal/service"
 	"strconv"
 
 	"github.com/gogf/gf/v2/frame/g"

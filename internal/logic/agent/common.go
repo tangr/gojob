@@ -1,8 +1,8 @@
 package agent
 
 import (
-	"cicdgf/internal/model"
 	"encoding/json"
+	"gojob/internal/model"
 	"strconv"
 
 	"github.com/gogf/gf/v2/frame/g"

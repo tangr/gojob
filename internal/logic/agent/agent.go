@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"time"
 
-	"cicdgf/internal/model"
+	"gojob/internal/model"
 
 	"github.com/gofrs/flock"
 	"github.com/gogf/gf/v2/encoding/gjson"

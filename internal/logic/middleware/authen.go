@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"time"
 
-	"cicdgf/internal/logic/common"
+	"gojob/internal/logic/common"
 
 	"github.com/gogf/gf/v2/net/ghttp"
 )
