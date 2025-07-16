@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{.pipeline_name|shortName}} - CICD</title>
+
+    {{include "base_head.html" .}}
+
+</head>
+<body>
+
+<div class="ui container maincontainer">
+    
+    {{include "base_menu.html" .}}
+
+<div class="ui breadcrumb">
+  <a class="section" href="{{.url|urlParentPath}}">Home</a>
+  <div class="divider"> / </div>
+  <a class="section" href="{{.url}}">Pipelines</a>
+  <div class="divider"> / </div>
+  <div class="active section">{{.pipeline_name|shortName}}</div>
+</div>
+
+<div class="ui divider"></div>
+
+<form class="ui form" method="POST" action="{{.apiurl}}">
+
+  <div class="field">
+    <label>Name</label>
+    <input type="text" name="pipeline_name" value="{{.pipeline_name}}" id="pipeline_name" placeholder="Name" required="required" autocomplete="off">
+  </div>
+  <div class="field">
+    <label>Group</label>
+    <div class="ui selection dropdown" id="group_id">
+        <input type="hidden" name="group_id">
+        <i class="dropdown icon"></i>
+        <div class="default text">Group</div>
+        <div class="menu">
+          {{range $val := .all_groups}}<div class="item" data-value="{{$val.Id}}">{{$val.Group_name}}</div>{{end}}
+        </div>
+    </div>
+  </div>
+  <div class="field">
+      <label>CIAgent</label>
+      <div class="ui selection dropdown" id="agent_id">
+          <input type="hidden" name="agent_id">
+          <i class="dropdown icon"></i>
+          <div class="default text">CIAgent</div>
+          <div class="menu">
+            {{range $val := .all_agents}}<div class="item" data-value="{{$val.Id}}">{{$val.Agent_name}}</div>{{end}}
+          </div>
+      </div>
+  </div>
+  <div class="field">
+    <label>Concurrency</label>
+    <input type="number" name="concurrency" value="1" min="-100" step="1" id="concurrency">
+  </div>
+  <div class="field">
+    <label>Pipeline Body</label>
+    <textarea rows="12" name="pipeline_body" id="pipeline_body" placeholder="Pipeline Content" required="required">{{.pipeline_body}}</textarea>
+  </div>
+
+
+  <button class="ui button" type="submit" id="pipeline_save">Submit</button>
+</form>
+
+</div>
+
+{{include "base_foot.html" .}}
+
+<script type="text/javascript">
+    $('.ui.dropdown').dropdown();
+
+    var pipeline_group = "{{ .pipeline_group }}";
+    var pipeline_agent = "{{ .pipeline_agent }}";
+    $('#group_id').dropdown('set selected', pipeline_group);
+    $('#agent_id').dropdown('set selected', pipeline_agent);
+
+    var textarea = document.getElementById("pipeline_body");
+    var formatted = JSON.stringify(JSON.parse(textarea.value), null, 4);
+    textarea.value = formatted;
+
+</script>
+
+
+</body>
+</html>
