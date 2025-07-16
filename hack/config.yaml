@@ -1,11 +1,11 @@
-
 # CLI tool, only in development environment.
 # https://goframe.org/docs/cli
 gfcli:
   gen:
     dao:
-      - link: "mysql:root:12345678@tcp(127.0.0.1:3306)/test"
+      - link: "mysql:root:mypassword@tcp(127.0.0.1:3306)/gojob"
         descriptionTag: true
+        tables: "cicd_user,cicd_group,cicd_agent,cicd_pipeline,cicd_script,cicd_job,cicd_log"
 
   docker:
     build: "-a amd64 -s linux -p temp -ew"
