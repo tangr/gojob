@@ -7,7 +7,7 @@ import (
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gcmd"
 
-	"gojob/internal/controller/hello"
+	"gojob/internal/controller/ui"
 )
 
 var (
@@ -20,7 +20,7 @@ var (
 			s.Group("/", func(group *ghttp.RouterGroup) {
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
 				group.Bind(
-					hello.NewV1(),
+					ui.NewV1(),
 				)
 			})
 			s.Run()
