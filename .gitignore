@@ -5,7 +5,6 @@
 .swp
 .idea/
 .settings/
-.vscode/
 bin/
 **/.DS_Store
 gf
@@ -16,4 +15,3 @@ manifest/output/
 temp/
 temp.yaml
 bin
-**/config/config.yaml
