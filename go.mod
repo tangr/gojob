@@ -4,7 +4,10 @@ go 1.22
 
 toolchain go1.23.6
 
-require github.com/gogf/gf/v2 v2.9.0
+require (
+	github.com/gofrs/flock v0.12.1
+	github.com/gogf/gf/v2 v2.9.0
+)
 
 require (
 	github.com/BurntSushi/toml v1.4.0 // indirect
