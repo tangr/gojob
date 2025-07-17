@@ -211,7 +211,7 @@
         // var pipeline_body = JSON.parse(res.body);
         var pipeline_body = res;
         if ($('#new_job_main').is(':empty') || typeof jobtype !== "undefined") {
-          var form_validation = {comment: 'empty'};
+          var form_validation = {COMMENT: 'empty'};
           if (jobtype == "BUILD") {
             console.log("jobtype: " + jobtype);
             make_newjob_view(pipeline_body.stageCI.envs, form_validation);
