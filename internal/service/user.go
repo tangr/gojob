@@ -35,12 +35,15 @@ func (s *userService) GetListUsers(ctx context.Context) (users []ListUsers, err 
 	return
 }
 
-func (s *userService) New(username string) int64 {
+func (s *userService) New(username string, groups []string) int64 {
 	ctx := context.Background()
 
 	new_user := g.Map{
 		"user_name": username,
+		"group_id":  groups,
 	}
+
+	g.Log().Debug(ctx, "new_user:", new_user)
 
 	result, err := dao.CicdUser.Ctx(ctx).Insert(new_user)
 	if err != nil {
