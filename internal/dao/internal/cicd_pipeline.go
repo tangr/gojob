@@ -25,7 +25,7 @@ type CicdPipelineColumns struct {
 	GroupId      string //
 	AgentId      string //
 	Concurrency  string //
-	Body         string //
+	PipelineBody string //
 	Author       string //
 	UpdatedAt    string //
 }
@@ -37,7 +37,7 @@ var cicdPipelineColumns = CicdPipelineColumns{
 	GroupId:      "group_id",
 	AgentId:      "agent_id",
 	Concurrency:  "concurrency",
-	Body:         "body",
+	PipelineBody: "pipeline_body",
 	Author:       "author",
 	UpdatedAt:    "updated_at",
 }
