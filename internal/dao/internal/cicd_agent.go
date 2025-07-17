@@ -22,7 +22,6 @@ type CicdAgentDao struct {
 type CicdAgentColumns struct {
 	Id        string //
 	AgentName string //
-	SToken    string //
 	Ipaddr    string //
 	UpdatedAt string //
 }
@@ -31,7 +30,6 @@ type CicdAgentColumns struct {
 var cicdAgentColumns = CicdAgentColumns{
 	Id:        "id",
 	AgentName: "agent_name",
-	SToken:    "s_token",
 	Ipaddr:    "ipaddr",
 	UpdatedAt: "updated_at",
 }

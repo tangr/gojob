@@ -8,7 +8,6 @@ package entity
 type CicdAgent struct {
 	Id        uint   `json:"id"        orm:"id"         description:""` //
 	AgentName string `json:"agentName" orm:"agent_name" description:""` //
-	SToken    string `json:"sToken"    orm:"s_token"    description:""` //
 	Ipaddr    string `json:"ipaddr"    orm:"ipaddr"     description:""` //
 	UpdatedAt uint64 `json:"updatedAt" orm:"updated_at" description:""` //
 }

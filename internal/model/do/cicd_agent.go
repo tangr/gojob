@@ -13,7 +13,6 @@ type CicdAgent struct {
 	g.Meta    `orm:"table:cicd_agent, do:true"`
 	Id        interface{} //
 	AgentName interface{} //
-	SToken    interface{} //
 	Ipaddr    interface{} //
 	UpdatedAt interface{} //
 }
