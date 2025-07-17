@@ -65,7 +65,7 @@ func (s *pipelineService) GetListPipelines(ctx context.Context) (pipelines []Lis
 	return
 }
 
-func (s *pipelineService) New(pipeline_name string, group_id int, agent_id int, concurrency int, pipeline_body string) int64 {
+func (s *pipelineService) New(pipeline_name string, group_id int, agent_id int, concurrency int, pipeline_body string, author string) int64 {
 	ctx := context.Background()
 
 	new_pipeline := g.Map{
@@ -74,6 +74,7 @@ func (s *pipelineService) New(pipeline_name string, group_id int, agent_id int, 
 		"agent_id":      agent_id,
 		"concurrency":   concurrency,
 		"pipeline_body": pipeline_body,
+		"author":        author,
 	}
 
 	result, err := dao.CicdPipeline.Ctx(ctx).Insert(new_pipeline)

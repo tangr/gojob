@@ -55,8 +55,9 @@ func (c *ControllerV1) PipelineCreate(ctx context.Context, req *PipelineCreateRe
 	var agent_id int = r.Get("agent_id").Int()
 	var concurrency int = r.Get("concurrency").Int()
 	var pipeline_body string = r.Get("pipeline_body").String()
+	var author string = "tangshoubin"
 
-	pipeline_id := service.Pipeline.New(pipeline_name, group_id, agent_id, concurrency, pipeline_body)
+	pipeline_id := service.Pipeline.New(pipeline_name, group_id, agent_id, concurrency, pipeline_body, author)
 
 	// r.Response.RedirectTo("/pipelines/"+fmt.Sprint(pipeline_id), 303)
 
