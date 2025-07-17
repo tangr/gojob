@@ -117,7 +117,7 @@ func (s *cicdService) CreateJob(ctx context.Context, pipeline_id int, envs map[s
 		return 0, nil
 	}
 
-	pipeline_body := pipeline.Body
+	pipeline_body := pipeline.PipelineBody
 	pipeline_name := pipeline.Pipeline_name
 	agent_id := pipeline.Agent_id
 	concurrency := pipeline.Concurrency
