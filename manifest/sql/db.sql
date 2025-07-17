@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `cicd_pipeline` (
   `group_id` int(11) UNSIGNED NOT NULL,
   `agent_id` int(11) UNSIGNED NOT NULL,
   `concurrency` int(11) UNSIGNED DEFAULT 1,
-  `body` JSON NOT NULL,
+  `pipeline_body` JSON NOT NULL,
   `author` varchar(255) NOT NULL,
   `updated_at` bigint(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
