@@ -13,7 +13,6 @@ type CicdPipeline struct {
 	g.Meta       `orm:"table:cicd_pipeline, do:true"`
 	Id           interface{} //
 	PipelineName interface{} //
-	SToken       interface{} //
 	GroupId      interface{} //
 	AgentId      interface{} //
 	Concurrency  interface{} //

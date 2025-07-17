@@ -8,7 +8,6 @@ package entity
 type CicdPipeline struct {
 	Id           uint   `json:"id"           orm:"id"            description:""` //
 	PipelineName string `json:"pipelineName" orm:"pipeline_name" description:""` //
-	SToken       string `json:"sToken"       orm:"s_token"       description:""` //
 	GroupId      uint   `json:"groupId"      orm:"group_id"      description:""` //
 	AgentId      uint   `json:"agentId"      orm:"agent_id"      description:""` //
 	Concurrency  uint   `json:"concurrency"  orm:"concurrency"   description:""` //

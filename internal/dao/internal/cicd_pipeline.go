@@ -22,7 +22,6 @@ type CicdPipelineDao struct {
 type CicdPipelineColumns struct {
 	Id           string //
 	PipelineName string //
-	SToken       string //
 	GroupId      string //
 	AgentId      string //
 	Concurrency  string //
@@ -35,7 +34,6 @@ type CicdPipelineColumns struct {
 var cicdPipelineColumns = CicdPipelineColumns{
 	Id:           "id",
 	PipelineName: "pipeline_name",
-	SToken:       "s_token",
 	GroupId:      "group_id",
 	AgentId:      "agent_id",
 	Concurrency:  "concurrency",
