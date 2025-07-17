@@ -11,12 +11,16 @@ import (
 	"github.com/gogf/gf/v2/net/ghttp"
 )
 
-type AgentReq struct {
-	g.Meta `path:"/agent" tags:"agent" method:"get" summary:"UiReq"`
+type JobRunReq struct {
+	g.Meta `path:"/agent/job/{id}/run" tags:"job run" method:"get" summary:"JobRunReq"`
+}
+type JobAbortReq struct {
+	g.Meta `path:"/agent/job/{id}/abort" tags:"job run" method:"get" summary:"JobAbortReq"`
 }
 
 type IAgentV1 interface {
-	Agent(ctx context.Context, req *AgentReq) (res *ghttp.Response, err error)
+	JobRun(ctx context.Context, req *JobRunReq) (res *ghttp.Response, err error)
+	JobAbort(ctx context.Context, req *JobAbortReq) (res *ghttp.Response, err error)
 }
 
 type ControllerV1 struct{}
