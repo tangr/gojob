@@ -23,7 +23,7 @@ type PipelineOne struct {
 	Group_id      string `json:"group_id"`
 	Agent_id      string `json:"agent_id"`
 	Concurrency   string `json:"concurrency"`
-	Body          string `json:"body"`
+	PipelineBody  string `json:"pipeline_body"`
 }
 
 type PipelineDetail struct {
@@ -31,7 +31,7 @@ type PipelineDetail struct {
 	Group_id      string       `json:"group_id"`
 	Agent_id      string       `json:"agent_id"`
 	Concurrency   string       `json:"concurrency"`
-	Body          PipelineBody `json:"body"`
+	PipelineBody  PipelineBody `json:"pipeline_body"`
 }
 
 type JobScriptObj struct {
@@ -94,7 +94,7 @@ func (s *pipelineService) GetOnePipeline(pipeline_id int) (*PipelineOne, error) 
 	ctx := context.Background()
 
 	record, err := dao.CicdPipeline.Ctx(ctx).
-		Fields("pipeline_name,group_id,agent_id,concurrency,body").
+		Fields("pipeline_name,group_id,agent_id,concurrency,pipeline_body").
 		Where("id=?", pipeline_id).
 		One()
 	if err != nil {
@@ -107,7 +107,7 @@ func (s *pipelineService) GetOnePipeline(pipeline_id int) (*PipelineOne, error) 
 		Group_id:      record["group_id"].String(),
 		Agent_id:      record["agent_id"].String(),
 		Concurrency:   record["concurrency"].String(),
-		Body:          record["body"].String(),
+		PipelineBody:  record["pipeline_body"].String(),
 	}, nil
 }
 
@@ -115,7 +115,7 @@ func (s *pipelineService) GetOne(pipeline_id int) (*PipelineDetail, error) {
 	ctx := context.Background()
 
 	record, err := dao.CicdPipeline.Ctx(ctx).
-		Fields("pipeline_name,group_id,agent_id,concurrency,body").
+		Fields("pipeline_name,group_id,agent_id,concurrency,pipeline_body").
 		Where("id=?", pipeline_id).
 		One()
 
@@ -125,7 +125,7 @@ func (s *pipelineService) GetOne(pipeline_id int) (*PipelineDetail, error) {
 	}
 
 	var pipelineBody PipelineBody
-	if err := gjson.DecodeTo(record["body"].String(), &pipelineBody); err != nil {
+	if err := gjson.DecodeTo(record["pipeline_body"].String(), &pipelineBody); err != nil {
 		return nil, err
 	}
 
@@ -134,7 +134,7 @@ func (s *pipelineService) GetOne(pipeline_id int) (*PipelineDetail, error) {
 		Group_id:      record["group_id"].String(),
 		Agent_id:      record["agent_id"].String(),
 		Concurrency:   record["concurrency"].String(),
-		Body:          pipelineBody,
+		PipelineBody:  pipelineBody,
 	}, nil
 }
 
@@ -142,10 +142,10 @@ func (s *pipelineService) Update(pipeline_id string, group_id string, agent_id s
 	ctx := context.Background()
 
 	new_pipeline := g.Map{
-		"pipeline_id": pipeline_id,
-		"group_id":    group_id,
-		"agent_id":    agent_id,
-		"body":        pipeline_body,
+		"pipeline_id":   pipeline_id,
+		"group_id":      group_id,
+		"agent_id":      agent_id,
+		"pipeline_body": pipeline_body,
 	}
 	g.Log().Debug(ctx, new_pipeline)
 
@@ -164,7 +164,7 @@ func (s *pipelineService) GetOnebody(pipeline_id int) (string, error) {
 	ctx := context.Background()
 
 	record, err := dao.CicdPipeline.Ctx(ctx).
-		Fields("body").
+		Fields("pipeline_body").
 		Where("id=?", pipeline_id).
 		One()
 
@@ -173,7 +173,7 @@ func (s *pipelineService) GetOnebody(pipeline_id int) (string, error) {
 		return "", err
 	}
 
-	return record["body"].String(), nil
+	return record["pipeline_body"].String(), nil
 }
 
 func (s *pipelineService) GetOneGroupId(pipeline_id int) (string, error) {

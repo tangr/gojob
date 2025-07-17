@@ -90,7 +90,7 @@ func (c *ControllerV1) PipelineGetOne(ctx context.Context, req *PipelineGetOneRe
 	}
 
 	g.Log().Debug(ctx, "pipeline: ", pipeline)
-	g.Log().Debug(ctx, "pipeline_body: ", pipeline.Body)
+	g.Log().Debug(ctx, "pipeline_body: ", pipeline.PipelineBody)
 
 	err = r.Response.WriteTpl("pipelines/edit.html", g.Map{
 		"url":            "/pipelines/",
@@ -101,7 +101,7 @@ func (c *ControllerV1) PipelineGetOne(ctx context.Context, req *PipelineGetOneRe
 		"all_groups":     all_groups,
 		"pipeline_group": pipeline.Group_id,
 		"pipeline_agent": pipeline.Agent_id,
-		"pipeline_body":  pipeline.Body,
+		"pipeline_body":  pipeline.PipelineBody,
 	})
 	return nil, err
 }
