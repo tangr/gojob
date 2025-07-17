@@ -95,12 +95,12 @@ func (c *ControllerV1) PipelineGetOne(ctx context.Context, req *PipelineGetOneRe
 	err = r.Response.WriteTpl("pipelines/edit.html", g.Map{
 		"url":            "/pipelines/",
 		"apiurl":         "/pipelines/" + fmt.Sprint(pipeline_id) + "/put",
-		"pipeline_name":  pipeline.Pipeline_name,
+		"pipeline_name":  pipeline.PipelineName,
 		"pipeline_id":    pipeline_id,
 		"all_agents":     all_agents,
 		"all_groups":     all_groups,
-		"pipeline_group": pipeline.Group_id,
-		"pipeline_agent": pipeline.Agent_id,
+		"pipeline_group": pipeline.GroupId,
+		"pipeline_agent": pipeline.AgentId,
 		"pipeline_body":  pipeline.PipelineBody,
 	})
 	return nil, err

@@ -14,24 +14,24 @@ var Pipeline = pipelineService{}
 type pipelineService struct{}
 
 type ListPipelines struct {
-	Id            int    `json:"pipeline_id"`
-	Pipeline_name string `json:"pipeline_name"`
+	Id           int    `json:"pipeline_id"`
+	PipelineName string `json:"pipeline_name"`
 }
 
 type PipelineOne struct {
-	Pipeline_name string `json:"pipeline_name"`
-	Group_id      string `json:"group_id"`
-	Agent_id      string `json:"agent_id"`
-	Concurrency   string `json:"concurrency"`
-	PipelineBody  string `json:"pipeline_body"`
+	PipelineName string `json:"pipeline_name"`
+	GroupId      string `json:"group_id"`
+	AgentId      string `json:"agent_id"`
+	Concurrency  string `json:"concurrency"`
+	PipelineBody string `json:"pipeline_body"`
 }
 
 type PipelineDetail struct {
-	Pipeline_name string       `json:"pipeline_name"`
-	Group_id      string       `json:"group_id"`
-	Agent_id      string       `json:"agent_id"`
-	Concurrency   string       `json:"concurrency"`
-	PipelineBody  PipelineBody `json:"pipeline_body"`
+	PipelineName string       `json:"pipeline_name"`
+	GroupId      string       `json:"group_id"`
+	AgentId      string       `json:"agent_id"`
+	Concurrency  string       `json:"concurrency"`
+	PipelineBody PipelineBody `json:"pipeline_body"`
 }
 
 type JobScriptObj struct {
@@ -103,11 +103,11 @@ func (s *pipelineService) GetOnePipeline(pipeline_id int) (*PipelineOne, error) 
 	}
 
 	return &PipelineOne{
-		Pipeline_name: record["pipeline_name"].String(),
-		Group_id:      record["group_id"].String(),
-		Agent_id:      record["agent_id"].String(),
-		Concurrency:   record["concurrency"].String(),
-		PipelineBody:  record["pipeline_body"].String(),
+		PipelineName: record["pipeline_name"].String(),
+		GroupId:      record["group_id"].String(),
+		AgentId:      record["agent_id"].String(),
+		Concurrency:  record["concurrency"].String(),
+		PipelineBody: record["pipeline_body"].String(),
 	}, nil
 }
 
@@ -130,11 +130,11 @@ func (s *pipelineService) GetOne(pipeline_id int) (*PipelineDetail, error) {
 	}
 
 	return &PipelineDetail{
-		Pipeline_name: record["pipeline_name"].String(),
-		Group_id:      record["group_id"].String(),
-		Agent_id:      record["agent_id"].String(),
-		Concurrency:   record["concurrency"].String(),
-		PipelineBody:  pipelineBody,
+		PipelineName: record["pipeline_name"].String(),
+		GroupId:      record["group_id"].String(),
+		AgentId:      record["agent_id"].String(),
+		Concurrency:  record["concurrency"].String(),
+		PipelineBody: pipelineBody,
 	}, nil
 }
 

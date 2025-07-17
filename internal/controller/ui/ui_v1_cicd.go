@@ -53,7 +53,7 @@ func (c *ControllerV1) CicdGetOne(ctx context.Context, req *CicdGetOneReq) (resp
 		"body_url":      "/jobs/" + fmt.Sprint(pipeline_id) + "/body",
 		"newJobUrl":     "/jobs/" + fmt.Sprint(pipeline_id) + "/newjob",
 		"pkgurl":        "/v1/" + fmt.Sprint(pipeline_id) + "/pkgs",
-		"pipeline_name": pipeline.Pipeline_name,
+		"pipeline_name": pipeline.PipelineName,
 		"pipeline_id":   pipeline_id,
 		"jobs":          jobs,
 		"page":          service.Cicd.PageContent(page),
@@ -140,7 +140,7 @@ func (c *ControllerV1) CicdJobGetOne(ctx context.Context, req *CicdJobGetOneReq)
 		return nil, err
 	}
 
-	pipeline_name := pipeline.Pipeline_name
+	pipeline_name := pipeline.PipelineName
 	job, err := service.Cicd.GetOneJob(job_id)
 	if err != nil {
 		g.Log().Debug(ctx, "CicdJobCreate err: ", err)
