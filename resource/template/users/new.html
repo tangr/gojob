@@ -29,9 +29,9 @@
 
     <div class="field">
       <label>Group</label>
-      <select name="groups" multiple="" class="ui fluid dropdown" required id="group_id">
+      <select name="groups[]" multiple="" class="ui fluid dropdown" required id="group_id">
         <option value="" disabled>Please select</option>
-        {{range $val := .groups}}<option value="{{$val.Id}}">{{$val.Group_name}}</div>{{end}}
+        {{range $val := .groups}}<option value="{{$val.Id}}">{{$val.Group_name}}</option>{{end}}
       </select>
     </div>
   

@@ -30,7 +30,7 @@
 
   <div class="field">
     <label>Group</label>
-    <select name="groups" multiple="" class="ui fluid dropdown" id="group_id">
+    <select name="groups[]" multiple="" class="ui fluid dropdown" id="group_id">
       {{range $val := .allgroups}}<option value="{{$val.Id}}">{{$val.Group_name}}</option>{{end}}
     </select>
   </div>
