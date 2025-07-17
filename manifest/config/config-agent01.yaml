@@ -1,3 +1,9 @@
+server:
+  address: ":8001"
+  accessLogEnabled: true
+  logger:
+    level: "info"
+
 # Logger.
 logger:
   Path: "/tmp/log/gf-app"
