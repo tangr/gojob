@@ -13,9 +13,9 @@
     {{include "base_menu.html" .}}
 
     <div class="ui breadcrumb">
-      <a class="section" href="{{.url|urlParentPath}}">Home</a>
+      <a class="section" href="{{.url|urlParentPath|urlParentPath}}">Home</a>
       <div class="divider"> / </div>
-      <a class="section" href="{{.url|urlParentPath}}">CICD</a>
+      <a class="section" href="{{.url}}">Job</a>
       <div class="divider"> / </div>
       <div class="active section">{{.pipeline_name|shortName}}</div>
     </div>
@@ -24,7 +24,7 @@
       <thead>
         <tr>
             <th class="selectable two wide" colspan="1">
-              CICDs
+              Jobs
             </th>
             <th></th>
             <th></th>
