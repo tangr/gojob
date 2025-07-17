@@ -116,19 +116,19 @@ type CicdGetListReq struct {
 	g.Meta `path:"/" tags:"ui" method:"get" summary:"CicdGetListReq"`
 }
 type CicdGetOneReq struct {
-	g.Meta `path:"/{id}" tags:"ui" method:"get" summary:"CicdGetOneReq"`
+	g.Meta `path:"/jobs/{id}" tags:"ui" method:"get" summary:"CicdGetOneReq"`
 }
 type CicdBodyGetOneReq struct {
-	g.Meta `path:"/{id}/body" tags:"ui" method:"get" summary:"CicdBodyGetOneReq"`
+	g.Meta `path:"/jobs/{id}/body" tags:"ui" method:"get" summary:"CicdBodyGetOneReq"`
 }
 type CicdJobCreateReq struct {
-	g.Meta `path:"/{pipeline_id}/newjob" tags:"ui" method:"post" summary:"CicdJobCreateReq"`
+	g.Meta `path:"/jobs/{pipeline_id}/newjob" tags:"ui" method:"post" summary:"CicdJobCreateReq"`
 }
 type CicdJobGetOneReq struct {
-	g.Meta `path:"/{pipeline_id}/{job_id}" tags:"ui" method:"get" summary:"CicdJobGetOneReq"`
+	g.Meta `path:"/jobs/{pipeline_id}/{job_id}" tags:"ui" method:"get" summary:"CicdJobGetOneReq"`
 }
 type CicdLogGetOneReq struct {
-	g.Meta `path:"/{pipeline_id}/{task_id}/log" tags:"ui" method:"get" summary:"CicdLogGetOneReq"`
+	g.Meta `path:"/jobs/{pipeline_id}/{task_id}/log" tags:"ui" method:"get" summary:"CicdLogGetOneReq"`
 }
 
 // type CicdGetListPkgsReq struct {
