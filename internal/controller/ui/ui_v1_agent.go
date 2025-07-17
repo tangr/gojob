@@ -42,7 +42,11 @@ func (c *ControllerV1) AgentCreate(ctx context.Context, req *AgentCreateReq) (re
 	var agent_ipaddr string = r.Get("agent_ipaddr").String()
 	agent_id := service.Agent.New(agent_name, agent_ipaddr)
 
-	r.Response.RedirectTo("/agents/"+fmt.Sprint(agent_id), 303)
+	// r.Response.RedirectTo("/agents/"+fmt.Sprint(agent_id), 303)
+	redirectURL := "/agents/" + fmt.Sprint(agent_id)
+	r.Response.Header().Add("Location", redirectURL)
+	r.Response.WriteStatus(302)
+	r.Response.WriteExit()
 
 	return nil, err
 }
@@ -78,7 +82,12 @@ func (c *ControllerV1) AgentUpdate(ctx context.Context, req *AgentUpdateReq) (re
 	g.Log().Debugf(ctx, "AgentUpdate agent_id: %s, agent_name: %s, agent_ipaddr: %s", agent_id, agent_name, agent_ipaddr)
 
 	_ = service.Agent.Update(agent_id, agent_name, agent_ipaddr)
-	r.Response.RedirectTo("/agents/"+fmt.Sprint(agent_id), 303)
+	// r.Response.RedirectTo("/agents/"+fmt.Sprint(agent_id), 303)
+
+	redirectURL := "/agents/" + fmt.Sprint(agent_id)
+	r.Response.Header().Add("Location", redirectURL)
+	r.Response.WriteStatus(302)
+	r.Response.WriteExit()
 
 	return nil, err
 }

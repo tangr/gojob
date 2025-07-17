@@ -33,7 +33,11 @@ func (c *ControllerV1) AuthLogin(ctx context.Context, req *AuthLoginReq) (respon
 		common.Cfg.LoginURL,
 		common.Cfg.ServiceURL,
 	)
-	r.Response.RedirectTo(redirectURL, 303)
+	// r.Response.RedirectTo(redirectURL, 303)
+
+	r.Response.Header().Add("Location", redirectURL)
+	r.Response.WriteStatus(302)
+	r.Response.WriteExit()
 
 	return nil, err
 }

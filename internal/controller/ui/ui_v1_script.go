@@ -45,7 +45,12 @@ func (c *ControllerV1) ScriptCreate(ctx context.Context, req *ScriptCreateReq) (
 
 	script_id := service.Script.New(script_name, script_body)
 
-	r.Response.RedirectTo("/scripts/"+fmt.Sprint(script_id), 303)
+	// r.Response.RedirectTo("/scripts/"+fmt.Sprint(script_id), 303)
+
+	redirectURL := "/scripts/" + fmt.Sprint(script_id)
+	r.Response.Header().Add("Location", redirectURL)
+	r.Response.WriteStatus(302)
+	r.Response.WriteExit()
 
 	return nil, err
 }
@@ -80,7 +85,12 @@ func (c *ControllerV1) ScriptUpdate(ctx context.Context, req *ScriptUpdateReq) (
 		script_id, script_body)
 
 	_ = service.Script.Update(script_id, script_body)
-	r.Response.RedirectTo("/scripts/"+fmt.Sprint(script_id), 303)
+	// r.Response.RedirectTo("/scripts/"+fmt.Sprint(script_id), 303)
+
+	redirectURL := "/scripts/" + fmt.Sprint(script_id)
+	r.Response.Header().Add("Location", redirectURL)
+	r.Response.WriteStatus(302)
+	r.Response.WriteExit()
 
 	return nil, err
 }

@@ -41,7 +41,12 @@ func (c *ControllerV1) GroupCreate(ctx context.Context, req *GroupCreateReq) (re
 
 	var groupname string = r.Get("groupname").String()
 	groupid := service.Group.New(groupname)
-	r.Response.RedirectTo("/groups/"+fmt.Sprint(groupid), 303)
+	// r.Response.RedirectTo("/groups/"+fmt.Sprint(groupid), 303)
+
+	redirectURL := "/groups/" + fmt.Sprint(groupid)
+	r.Response.Header().Add("Location", redirectURL)
+	r.Response.WriteStatus(302)
+	r.Response.WriteExit()
 
 	return nil, err
 }
@@ -68,7 +73,12 @@ func (c *ControllerV1) GroupUpdate(ctx context.Context, req *GroupUpdateReq) (re
 	var groupid string = r.Get("id").String()
 	var groupname string = r.Get("groupname").String()
 	_ = service.Group.Update(groupid, groupname)
-	r.Response.RedirectTo("/groups/"+fmt.Sprint(groupid), 303)
+	// r.Response.RedirectTo("/groups/"+fmt.Sprint(groupid), 303)
+
+	redirectURL := "/groups/" + fmt.Sprint(groupid)
+	r.Response.Header().Add("Location", redirectURL)
+	r.Response.WriteStatus(302)
+	r.Response.WriteExit()
 
 	return nil, err
 }

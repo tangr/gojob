@@ -58,7 +58,12 @@ func (c *ControllerV1) PipelineCreate(ctx context.Context, req *PipelineCreateRe
 
 	pipeline_id := service.Pipeline.New(pipeline_name, group_id, agent_id, concurrency, pipeline_body)
 
-	r.Response.RedirectTo("/pipelines/"+fmt.Sprint(pipeline_id), 303)
+	// r.Response.RedirectTo("/pipelines/"+fmt.Sprint(pipeline_id), 303)
+
+	redirectURL := "/pipelines/" + fmt.Sprint(pipeline_id)
+	r.Response.Header().Add("Location", redirectURL)
+	r.Response.WriteStatus(302)
+	r.Response.WriteExit()
 
 	return nil, err
 }
@@ -112,7 +117,12 @@ func (c *ControllerV1) PipelineUpdate(ctx context.Context, req *PipelineUpdateRe
 		pipeline_id, group_id, agent_id, pipeline_body)
 
 	_ = service.Pipeline.Update(pipeline_id, group_id, agent_id, pipeline_body)
-	r.Response.RedirectTo("/pipelines/"+fmt.Sprint(pipeline_id), 303)
+	// r.Response.RedirectTo("/pipelines/"+fmt.Sprint(pipeline_id), 303)
+
+	redirectURL := "/pipelines/" + fmt.Sprint(pipeline_id)
+	r.Response.Header().Add("Location", redirectURL)
+	r.Response.WriteStatus(302)
+	r.Response.WriteExit()
 
 	return nil, err
 }
