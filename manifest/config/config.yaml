@@ -4,6 +4,24 @@ server:
   openapiPath: "/api.json"
   swaggerPath: "/swagger"
   server-root: "resource/public"
+  cas-sso: false
+  accessLogEnabled: true
+  logger:
+    level: "info"
+
+cas-sso:
+  cas-server-url: https://sso-test.exodushk.com/cas
+  service-url: http://localhost:8000
+  # ServerURL: "https://sso-prod.yax.tech/cas"
+  # Service: "http://localhost:8000"
+  validate-url: "/serviceValidate"
+  login-url: "/login"
+  logout-url: "/logout"
+
+admin:
+  author_enable: true
+  admin_users:
+    - "tangshoubin"
 
 # https://goframe.org/docs/core/glog-config
 logger:
@@ -14,3 +32,10 @@ logger:
 database:
   default:
     link: "mysql:root:mypassword@tcp(127.0.0.1:3306)/gojob"
+
+# Template.
+viewer:
+  paths: ["resource/template"]
+  default-file: "index.html"
+  delimiters: ["{{", "}}"]
+  debug: true
