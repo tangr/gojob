@@ -104,7 +104,7 @@ func (c *ControllerV1) CicdJobCreate(ctx context.Context, req *CicdJobCreateReq)
 		return nil, err
 	}
 
-	redirectURL := "/" + fmt.Sprint(pipeline_id) + "/" + strconv.FormatInt(job_id, 10)
+	redirectURL := "/jobs/" + fmt.Sprint(pipeline_id) + "/" + strconv.FormatInt(job_id, 10)
 	r.Response.Header().Add("Location", redirectURL)
 	r.Response.WriteStatus(302)
 	r.Response.WriteExit()
@@ -148,7 +148,7 @@ func (c *ControllerV1) CicdJobGetOne(ctx context.Context, req *CicdJobGetOneReq)
 	}
 	concurrency, job_type, job_status := job.Concurrency, job.JobType, job.JobStatus
 	params := g.Map{
-		"url":           "/" + fmt.Sprint(pipeline_id) + "/",
+		"url":           "/jobs/" + fmt.Sprint(pipeline_id) + "/",
 		"apiurl":        "/v1/" + fmt.Sprint(pipeline_id, "/", job_id),
 		"pipeline_name": pipeline_name,
 		"pipeline_id":   pipeline_id,
@@ -157,7 +157,7 @@ func (c *ControllerV1) CicdJobGetOne(ctx context.Context, req *CicdJobGetOneReq)
 		"job_type":      job_type,
 		"job_status":    job_status,
 		"tasks":         tasks,
-		"taskurl":       "/" + fmt.Sprint(pipeline_id) + "/",
+		"taskurl":       "/jobs/" + fmt.Sprint(pipeline_id) + "/",
 	}
 	if job_type == "BUILD" {
 		// r.Response.WriteExit(params)
