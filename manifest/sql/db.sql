@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `cicd_script` (
 CREATE TABLE IF NOT EXISTS `cicd_agent` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `agent_name` varchar(255) NOT NULL,
-  `s_token` varchar(255) NOT NULL,
+  -- `s_token` varchar(255) NOT NULL,
   `ipaddr` varchar(255) NOT NULL,
   `updated_at` bigint(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
