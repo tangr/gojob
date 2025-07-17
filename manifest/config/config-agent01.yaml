@@ -1,0 +1,24 @@
+# Logger.
+logger:
+  Path: "/tmp/log/gf-app"
+  Level: "all"
+  Stdout: true
+
+# AgentCI.
+agent:
+  # WsUrl: "ws://127.0.0.1:8080/wsv1/wsci"
+  ApiUrl: "http://127.0.0.1:8000/api"
+  # SyncInterval in second
+  SyncInterval: 3
+  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  LogLevel: "all"
+  EnvPrefix: "CICD_"
+  MaxRunningJobs: 1
+  DataPathDir: "/tmp/cicddata/"
+  JobFlash: "jobflash"
+#   Include: "config/conf.d/*.toml"
+
+agents:
+  - id: 1000
+    name: "agent-test-1"
+    # name: "pipeline-test-1"
