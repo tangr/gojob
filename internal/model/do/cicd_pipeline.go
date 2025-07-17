@@ -16,6 +16,7 @@ type CicdPipeline struct {
 	SToken       interface{} //
 	GroupId      interface{} //
 	AgentId      interface{} //
+	Concurrency  interface{} //
 	Body         interface{} //
 	Author       interface{} //
 	UpdatedAt    interface{} //

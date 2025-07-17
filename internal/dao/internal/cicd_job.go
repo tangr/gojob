@@ -20,28 +20,30 @@ type CicdJobDao struct {
 
 // CicdJobColumns defines and stores column names for the table cicd_job.
 type CicdJobColumns struct {
-	Id         string //
-	PipelineId string //
-	AgentId    string //
-	JobType    string //
-	JobStatus  string //
-	Script     string //
-	Comment    string //
-	Author     string //
-	CreatedAt  string //
+	Id          string //
+	PipelineId  string //
+	AgentId     string //
+	Concurrency string //
+	JobType     string //
+	JobStatus   string //
+	Script      string //
+	Comment     string //
+	Author      string //
+	CreatedAt   string //
 }
 
 // cicdJobColumns holds the columns for the table cicd_job.
 var cicdJobColumns = CicdJobColumns{
-	Id:         "id",
-	PipelineId: "pipeline_id",
-	AgentId:    "agent_id",
-	JobType:    "job_type",
-	JobStatus:  "job_status",
-	Script:     "script",
-	Comment:    "comment",
-	Author:     "author",
-	CreatedAt:  "created_at",
+	Id:          "id",
+	PipelineId:  "pipeline_id",
+	AgentId:     "agent_id",
+	Concurrency: "concurrency",
+	JobType:     "job_type",
+	JobStatus:   "job_status",
+	Script:      "script",
+	Comment:     "comment",
+	Author:      "author",
+	CreatedAt:   "created_at",
 }
 
 // NewCicdJobDao creates and returns a new DAO object for table data access.
