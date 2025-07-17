@@ -44,8 +44,15 @@ func (c *ControllerV1) UserCreate(ctx context.Context, req *UserCreateReq) (resp
 	r := g.RequestFromCtx(ctx)
 
 	var username string = r.Get("username").String()
-	userid := service.User.New(username)
-	r.Response.RedirectTo("/users/"+fmt.Sprint(userid), 303)
+	var groups []string = r.Get("groups").Strings()
+	g.Log().Debug(ctx, "groups:", groups)
+	userid := service.User.New(username, groups)
+	// r.Response.RedirectTo("/users/"+fmt.Sprint(userid), 302)
+
+	redirectURL := "/users/" + fmt.Sprint(userid)
+	r.Response.Header().Add("Location", redirectURL)
+	r.Response.WriteStatus(302)
+	r.Response.WriteExit()
 
 	return nil, err
 }
@@ -64,11 +71,11 @@ func (c *ControllerV1) UserGetOne(ctx context.Context, req *UserGetOneReq) (resp
 		return nil, err
 	}
 
-	g.Log().Debug(ctx, "user: ", user)
+	// g.Log().Debug(ctx, "user: ", user)
 
-	g.Log().Debugf(ctx, "userid: %s, username: %s", userid, user.Username)
+	// g.Log().Debugf(ctx, "userid: %s, username: %s", userid, user.Username)
 
-	g.Log().Debug(ctx, "allgroups:", allgroups)
+	// g.Log().Debug(ctx, "allgroups:", allgroups)
 	g.Log().Debug(ctx, "usergroups: ", user.GroupId)
 
 	err = r.Response.WriteTpl("users/show.html", g.Map{
@@ -87,8 +94,14 @@ func (c *ControllerV1) UserUpdate(ctx context.Context, req *UserUpdateReq) (resp
 	var userid string = r.Get("id").String()
 	var username string = r.Get("username").String()
 	group_id := r.Get("groups").Strings()
+	g.Log().Debug(ctx, "UserUpdate group_id: ", group_id)
 	_ = service.User.Update(userid, username, group_id)
-	r.Response.RedirectTo("/users/"+fmt.Sprint(userid), 303)
+	// r.Response.RedirectTo("/users/"+fmt.Sprint(userid), 303)
+
+	redirectURL := "/users/" + fmt.Sprint(userid)
+	r.Response.Header().Add("Location", redirectURL)
+	r.Response.WriteStatus(302)
+	r.Response.WriteExit()
 
 	return nil, err
 }
