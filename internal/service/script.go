@@ -33,12 +33,13 @@ func (s *scriptService) GetListScripts(ctx context.Context) (scripts []ListScrip
 	return
 }
 
-func (s *scriptService) New(script_name string, script_body string) int64 {
+func (s *scriptService) New(script_name string, script_body string, script_author string) int64 {
 	ctx := context.Background()
 
 	new_script := g.Map{
 		"script_name": script_name,
 		"script_body": script_body,
+		"author":      script_author,
 	}
 
 	result, err := dao.CicdScript.Ctx(ctx).Insert(new_script)
