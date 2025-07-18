@@ -23,6 +23,11 @@ var (
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
 				group.Bind(
 					ui.NewV1(),
+				)
+			})
+			s.Group("/api/", func(group *ghttp.RouterGroup) {
+				group.Middleware(ghttp.MiddlewareHandlerResponse)
+				group.Bind(
 					api.NewV1(),
 				)
 			})
