@@ -19,13 +19,16 @@ func (j *JobInfoMap) GetScript() Script {
 	return script
 }
 
-func (s *agentCICD) GetScriptByTask(taskid int) Script {
-	taskInfo := s.GetTaskInfoById(taskid)
-	jobId := taskInfo.JobId
+func (s *agentCICD) GetScriptByTask(jobid int) Script {
+	// taskInfo := s.GetTaskInfoById(taskid)
+	// jobId := taskInfo.JobId
+	jobId := jobid
 
 	var jobGetRes model.JobGetRes
 
 	url := apiUrl + "/job/" + strconv.Itoa(jobId)
+	g.Log().Debugf(ctx, "GetScriptByTask url: %s", url)
+
 	response, err := client.Get(ctx, url)
 	if err != nil {
 		g.Log().Error(ctx, jobId, err)

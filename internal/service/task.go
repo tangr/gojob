@@ -37,6 +37,8 @@ func (s *taskService) Run(job_id string) (*TaskResult, error) {
 	g.Log().Debugf(ctx, "HandleJob GetScriptByTask script_args: %s", script_args)
 	g.Log().Debugf(ctx, "HandleJob GetScriptByTask script_envs: %s", script_envs)
 
+	g.Log().Debugf(ctx, "HandleJob GetScriptByTask MaxRunningJobs: %d", agent.MaxRunningJobs)
+
 	return &TaskResult{
 		Status: "status",
 	}, nil
