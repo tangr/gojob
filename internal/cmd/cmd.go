@@ -8,6 +8,7 @@ import (
 	"github.com/gogf/gf/v2/os/gcmd"
 
 	"gojob/internal/controller/agent"
+	"gojob/internal/controller/api"
 	"gojob/internal/controller/ui"
 )
 
@@ -22,6 +23,7 @@ var (
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
 				group.Bind(
 					ui.NewV1(),
+					api.NewV1(),
 				)
 			})
 			s.Run()
