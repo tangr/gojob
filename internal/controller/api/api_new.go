@@ -24,8 +24,38 @@ type GetOneRes struct {
 	*entity.CicdJob `dc:"job"`
 }
 
+type JobLogReq struct {
+	g.Meta `path:"/log/{id}" tags:"job log" method:"put" summary:"JobLogReq"`
+
+	Id         uint64 `v:"required" json:"id" dc:"Log ID"`
+	PipelineId int    `v:"required-without:agentId" json:"pipelineId" dc:"Pipeline ID"`
+	AgentId    int    `v:"required-without:pipelineId" json:"agentId" dc:"Agent ID"`
+	JobType    string `v:"required|in:BUILD,DEPLOY" json:"jobType" dc:"Job type"`
+	JobId      int    `v:"required" json:"jobId" dc:"Job ID"`
+	TaskStatus string `v:"required|in:pending,running,failed,success" json:"taskStatus" dc:"Task status"`
+	Ipaddr     string `v:"required" json:"ipaddr" dc:"IP address"`
+	UpdatedAt  int64  `v:"required" json:"updatedAt" dc:"Update timestamp"`
+	Output     string `json:"output" dc:"Output content"`
+}
+
+type UpdateReq struct {
+	g.Meta `path:"/log/{id}" method:"put" tags:"Log" summary:"Update Log"`
+
+	Id         uint64 `v:"required" json:"id" dc:"Log ID"`
+	PipelineId int    `v:"required-without:agentId" json:"pipelineId" dc:"Pipeline ID"`
+	AgentId    int    `v:"required-without:pipelineId" json:"agentId" dc:"Agent ID"`
+	JobType    string `v:"required|in:BUILD,DEPLOY" json:"jobType" dc:"Job type"`
+	JobId      int    `v:"required" json:"jobId" dc:"Job ID"`
+	TaskStatus string `v:"required|in:pending,running,failed,success" json:"taskStatus" dc:"Task status"`
+	Ipaddr     string `v:"required" json:"ipaddr" dc:"IP address"`
+	UpdatedAt  int64  `v:"required" json:"updatedAt" dc:"Update timestamp"`
+	Output     string `json:"output" dc:"Output content"`
+}
+type UpdateRes struct{}
+
 type IApiV1 interface {
 	JobScript(ctx context.Context, req *JobScriptReq) (res *ghttp.Response, err error)
+	JobLog(ctx context.Context, req *JobLogReq) (res *ghttp.Response, err error)
 }
 
 type ControllerV1 struct{}

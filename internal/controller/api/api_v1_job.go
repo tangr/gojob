@@ -3,10 +3,12 @@ package api
 import (
 	"context"
 	"gojob/internal/dao"
+	"gojob/internal/model/do"
 	"gojob/internal/service"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
+	"github.com/gogf/gf/v2/util/gconv"
 )
 
 func (c *ControllerV1) JobScript(ctx context.Context, req *JobScriptReq) (response *ghttp.Response, err error) {
@@ -33,5 +35,31 @@ func (c *ControllerV1) GetOne(ctx context.Context, req *GetOneReq) (res *GetOneR
 
 	res = &GetOneRes{}
 	err = dao.CicdJob.Ctx(ctx).WherePri(req.Id).Scan(&res.CicdJob)
+	return
+}
+
+func (c *ControllerV1) JobLog(ctx context.Context, req *JobLogReq) (response *ghttp.Response, err error) {
+	r := g.RequestFromCtx(ctx)
+	g.Log().Debugf(ctx, "sendMap: %s", gconv.String(req))
+
+	job_id := r.Get("id").String()
+
+	_, err = dao.CicdLog.Ctx(ctx).Data(do.CicdLog{
+		PipelineId: req.PipelineId,
+		AgentId:    req.AgentId,
+		JobType:    req.JobType,
+		JobId:      req.JobId,
+		TaskStatus: req.TaskStatus,
+		Ipaddr:     req.Ipaddr,
+		UpdatedAt:  req.UpdatedAt,
+		Output:     req.Output,
+	}).WherePri(job_id).Update()
+
+	// if req.JobType == "BUILD" {
+	// 	_, err = dao.CicdJob.Ctx(ctx).Data(do.CicdJob{
+	// 		JobStatus: req.TaskStatus,
+	// 	}).WherePri(req.JobId).Update()
+	// }
+
 	return
 }
