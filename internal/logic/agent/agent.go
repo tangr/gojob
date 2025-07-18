@@ -373,6 +373,117 @@ func (s *agentCICD) HandleJob(ctx context.Context, jobv *WsServerSendMap) {
 
 }
 
+func (s *agentCICD) HandleJob2(ctx context.Context, job_id int) {
+	var sendMap = &WsAgentSendLogMap{}
+	taskId := job_id
+
+	// taskInfo := s.GetTaskInfoById(taskId)
+
+	// sendMap.JobType = taskInfo.JobType
+	// sendMap.Ipaddr = "127.0.0.1"
+
+	// jobStatus := jobv.JobStatus
+	// sendMap.AgentId = jobv.AgentId
+	// sendMap.JobId = taskInfo.JobId
+	// sendMap.PipelineId = taskInfo.PipelineId
+
+	ticker := time.NewTicker(3 * time.Second)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ctx.Done():
+			g.Log().Debug(ctx, "File reading stopped")
+			return
+		case <-ticker.C:
+			oldStatus := s.GetStatus(taskId)
+			if oldStatus == "" {
+				if err := s.SetStatus(taskId, "pending"); err != nil {
+					g.Log().Error(ctx, taskId, err)
+				}
+
+				g.Log().Debug(ctx, "HandleJob GetScriptByTask")
+
+				var script Script = s.GetScriptByTask(taskId)
+				script_body := script.Body
+				script_envs := script.Envs
+				script_args := script.Args
+
+				g.Log().Debugf(ctx, "HandleJob GetScriptByTask script_body: %s", script_body)
+				g.Log().Debugf(ctx, "HandleJob GetScriptByTask script_args: %s", script_args)
+				g.Log().Debugf(ctx, "HandleJob GetScriptByTask script_envs: %s", script_envs)
+
+				jobPath := dataPathDir + strconv.Itoa(taskId)
+				jobPathOutput := jobPath + ".output"
+
+				if _, ok := runningJobs[taskId]; !ok {
+					scriptBody := script_body + "\n"
+					scriptBody = strings.Replace(scriptBody, "\r\n", "\n", -1)
+					jobPathscriptBody := jobPath + ".scriptbody"
+					s.WriteFile(jobPathscriptBody, scriptBody)
+					scriptArgs := script_args + "\n"
+					scriptArgs = strings.Replace(scriptArgs, "\r\n", "\n", -1)
+					jobPathscriptArgs := jobPath + ".scriptargs"
+					s.WriteFile(jobPathscriptArgs, scriptArgs)
+					var scriptEnvs []string
+					envAgentName := strings.Split("AgentName", ":")[0]
+					scriptEnvs = append(scriptEnvs, envPrefix+"AGENTNAME"+"="+envAgentName)
+					for k, v := range script_envs {
+						scriptEnvs = append(scriptEnvs, envPrefix+k+"="+v)
+					}
+					execommand := s.GetExecutable(scriptBody)
+					if execommand != "" {
+						runcommand := execommand + " " + jobPathscriptBody + " " + jobPathscriptArgs + " >>" + jobPathOutput + " 2>&1"
+						g.Log().Debugf(ctx, "Run taskId: %d with Command: %s and scriptEnvs: %s", taskId, runcommand, scriptEnvs)
+						go s.RunCommand(taskId, runcommand, scriptEnvs)
+					}
+				}
+			}
+
+			jobPath := dataPathDir + strconv.Itoa(taskId)
+			jobPathOutput := jobPath + ".output"
+			output := s.ReadFile(jobPathOutput)
+			g.Log().Debug(ctx, "File content: %s\n", string(output))
+			sendMap.Output = output
+			taskStatus := s.GetStatus(taskId)
+			sendMap.TaskStatus = taskStatus
+			currentTime := gtime.Timestamp()
+			sendMap.UpdatedAt = currentTime
+
+			g.Log().Debugf(ctx, "currentTime: %d-%d", taskId, currentTime)
+			g.Log().Debugf(ctx, "sendMap: %s", gconv.String(sendMap))
+			url := apiUrl + "/log/" + strconv.Itoa(taskId)
+			response, err := client.Put(ctx, url, sendMap)
+			if err != nil {
+				g.Log().Errorf(ctx, "发送状态更新失败: %v", err)
+			}
+			res := response.ReadAll()
+			g.Log().Debugf(ctx, "Receive Put response: %s", gconv.String(res))
+			g.Log().Debugf(ctx, "Receive Put StatusCode: %s", gconv.String(response.StatusCode))
+
+			g.Log().Debugf(ctx, "Send Put req: %s", gconv.String(taskStatus))
+
+			if taskStatus == "success" || taskStatus == "failed" {
+				g.Log().Debugf(ctx, "Send Put req2: %s", gconv.String(taskStatus))
+				return
+			}
+		}
+	}
+
+}
+
+func (s *agentCICD) HandleRecvJson2(job_id int) {
+	g.Log().Debugf(ctx, "len runningJobs: %d %d", len(runningJobs), MaxRunningJobs)
+	if len(runningJobs) >= MaxRunningJobs {
+		if _, ok := runningJobs[job_id]; !ok {
+			return
+		}
+	}
+
+	go s.HandleJob2(ctx, job_id)
+
+}
+
 func (s *agentCICD) HandleRecvJson(recvJson *WsServerSend) {
 	// var sendJson WsAgentSend
 	// var sendJson = WsAgentSend{

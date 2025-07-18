@@ -28,6 +28,8 @@ func (s *taskService) Run(job_id string) (*TaskResult, error) {
 		fmt.Println("转换失败:", err)
 	}
 
+	agent.AgentCICD.HandleRecvJson2(jobId)
+
 	var script_obj ScriptObj = agent.AgentCICD.GetScriptByTask(jobId)
 	script_body := script_obj.Body
 	script_envs := script_obj.Envs
