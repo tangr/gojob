@@ -18,6 +18,7 @@ func (c *ControllerV1) JobRun(ctx context.Context, req *JobRunReq) (response *gh
 	if err != nil {
 		return nil, err
 	}
+	g.Log().Debug(ctx, "pipeline_body: ", pipeline_body)
 
 	r.Response.WriteExit(pipeline_body)
 	return nil, nil
