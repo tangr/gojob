@@ -44,21 +44,30 @@ func (c *ControllerV1) JobLog(ctx context.Context, req *JobLogReq) (response *gh
 
 	job_id := r.Get("id").String()
 
-	_, err = dao.CicdLog.Ctx(ctx).Data(do.CicdLog{
-		PipelineId: req.PipelineId,
-		AgentId:    req.AgentId,
-		JobType:    req.JobType,
-		JobId:      req.JobId,
-		TaskStatus: req.TaskStatus,
-		Ipaddr:     req.Ipaddr,
-		UpdatedAt:  req.UpdatedAt,
-		Output:     req.Output,
-	}).WherePri(job_id).Update()
+	g.Log().Debug(ctx, "JobLog req: ", req)
 
-	if req.JobType == "BUILD" {
-		_, err = dao.CicdJob.Ctx(ctx).Data(do.CicdJob{
-			JobStatus: req.TaskStatus,
-		}).WherePri(req.JobId).Update()
+	// _, err = dao.CicdLog.Ctx(ctx).Data(do.CicdLog{
+	// 	PipelineId: req.PipelineId,
+	// 	AgentId:    req.AgentId,
+	// 	JobType:    req.JobType,
+	// 	JobId:      req.JobId,
+	// 	TaskStatus: req.TaskStatus,
+	// 	Ipaddr:     req.Ipaddr,
+	// 	UpdatedAt:  req.UpdatedAt,
+	// 	Output:     req.Output,
+	// }).WherePri(job_id).Update()
+	// if err != nil {
+	// 	g.Log().Debug(ctx, "JobLog CicdLog err: ", err)
+	// 	// return nil, err
+	// }
+
+	_, err = dao.CicdJob.Ctx(ctx).Data(do.CicdJob{
+		JobStatus: req.TaskStatus,
+		Output:    req.Output,
+	}).WherePri(job_id).Update()
+	if err != nil {
+		g.Log().Debug(ctx, "JobLog CicdJob err: ", err)
+		// return nil, err
 	}
 
 	return
