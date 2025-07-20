@@ -159,6 +159,10 @@ func (c *ControllerV1) CicdJobGetOne(ctx context.Context, req *CicdJobGetOneReq)
 		"tasks":         tasks,
 		"taskurl":       "/jobs/" + fmt.Sprint(pipeline_id) + "/",
 	}
+	g.Log().Debug(ctx, "CicdJobGetOne pipeline: ", pipeline)
+	g.Log().Debug(ctx, "CicdJobGetOne job: ", job)
+	g.Log().Debug(ctx, "CicdJobGetOne tasks: ", tasks)
+
 	if job_type == "BUILD" {
 		// r.Response.WriteExit(params)
 		r.Response.WriteTpl("cicd/job_build.html", params)
