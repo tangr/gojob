@@ -31,6 +31,7 @@ type CicdJobColumns struct {
 	Author      string //
 	Output      string //
 	CreatedAt   string //
+	UpdatedAt   string //
 }
 
 // cicdJobColumns holds the columns for the table cicd_job.
@@ -46,6 +47,7 @@ var cicdJobColumns = CicdJobColumns{
 	Author:      "author",
 	Output:      "output",
 	CreatedAt:   "created_at",
+	UpdatedAt:   "updated_at",
 }
 
 // NewCicdJobDao creates and returns a new DAO object for table data access.

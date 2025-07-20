@@ -22,4 +22,5 @@ type CicdJob struct {
 	Author      interface{} //
 	Output      interface{} //
 	CreatedAt   interface{} //
+	UpdatedAt   interface{} //
 }

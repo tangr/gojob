@@ -17,4 +17,5 @@ type CicdJob struct {
 	Author      string `json:"author"      orm:"author"      description:""` //
 	Output      string `json:"output"      orm:"output"      description:""` //
 	CreatedAt   uint64 `json:"createdAt"   orm:"created_at"  description:""` //
+	UpdatedAt   uint64 `json:"updatedAt"   orm:"updated_at"  description:""` //
 }
