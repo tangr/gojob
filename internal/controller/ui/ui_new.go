@@ -128,7 +128,10 @@ type CicdJobGetOneReq struct {
 	g.Meta `path:"/jobs/{pipeline_id}/{job_id}" tags:"ui" method:"get" summary:"CicdJobGetOneReq"`
 }
 type CicdLogGetOneReq struct {
-	g.Meta `path:"/jobs/{pipeline_id}/{task_id}/log" tags:"ui" method:"get" summary:"CicdLogGetOneReq"`
+	g.Meta `path:"/jobs/{pipeline_id}/{task_id}/log2" tags:"ui" method:"get" summary:"CicdLogGetOneReq"`
+}
+type JobLogGetOneReq struct {
+	g.Meta `path:"/jobs/{pipeline_id}/{job_id}/log" tags:"ui" method:"get" summary:"JobLogGetOneReq"`
 }
 
 // type CicdGetListPkgsReq struct {

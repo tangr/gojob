@@ -207,5 +207,27 @@ func (c *ControllerV1) CicdLogGetOne(ctx context.Context, req *CicdLogGetOneReq)
 	r.Response.WriteExit(outputObj)
 
 	return nil, nil
+}
 
+func (c *ControllerV1) JobLogGetOne(ctx context.Context, req *JobLogGetOneReq) (response *ghttp.Response, err error) {
+	r := g.RequestFromCtx(ctx)
+
+	var pipeline_id int = r.Get("pipeline_id").Int()
+	// if !service.CheckAuthor(r.Context(), pipeline_id) {
+	// 	r.Response.WriteStatus(http.StatusForbidden)
+	// }
+	var job_id int = r.Get("job_id").Int()
+	outputObj, err := service.Cicd.JobGetLog(ctx, pipeline_id, job_id)
+	if err != nil {
+		return nil, err
+	}
+
+	if outputObj == nil {
+		r.Response.WriteStatus(http.StatusNotFound)
+		return nil, nil
+	}
+
+	r.Response.WriteExit(outputObj)
+
+	return nil, nil
 }
