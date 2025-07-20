@@ -9,10 +9,10 @@ import (
 )
 
 type JobScriptReq struct {
-	g.Meta `path:"/job/script/{id}" tags:"job script" method:"get" summary:"JobScriptReq"`
+	g.Meta `path:"/job/script/{id}" method:"get" tags:"job script" summary:"JobScriptReq"`
 }
 type JobAbortReq struct {
-	g.Meta `path:"/job/log/{id}" tags:"job log" method:"post" summary:"JobLogReq"`
+	g.Meta `path:"/job/log/{id}" method:"post" tags:"job log" summary:"JobAbortReq"`
 }
 
 type GetOneReq struct {
@@ -39,23 +39,8 @@ type JobLogReq struct {
 }
 
 type JobGetLogReq struct {
-	g.Meta `path:"/job/{pipeline_id}/{job_id}/log" tags:"job log" method:"get" summary:"JobLogReq"`
+	g.Meta `path:"/job/{pipeline_id}/{job_id}/log" tags:"job log" method:"get" summary:"JobGetLogReq"`
 }
-
-type UpdateReq struct {
-	g.Meta `path:"/log/{id}" method:"put" tags:"Log" summary:"Update Log"`
-
-	Id         uint64 `v:"required" json:"id" dc:"Log ID"`
-	PipelineId int    `v:"required-without:agentId" json:"pipelineId" dc:"Pipeline ID"`
-	AgentId    int    `v:"required-without:pipelineId" json:"agentId" dc:"Agent ID"`
-	JobType    string `v:"required|in:BUILD,DEPLOY" json:"jobType" dc:"Job type"`
-	JobId      int    `v:"required" json:"jobId" dc:"Job ID"`
-	TaskStatus string `v:"required|in:pending,running,failed,success" json:"taskStatus" dc:"Task status"`
-	Ipaddr     string `v:"required" json:"ipaddr" dc:"IP address"`
-	UpdatedAt  int64  `v:"required" json:"updatedAt" dc:"Update timestamp"`
-	Output     string `json:"output" dc:"Output content"`
-}
-type UpdateRes struct{}
 
 type IApiV1 interface {
 	JobScript(ctx context.Context, req *JobScriptReq) (res *ghttp.Response, err error)
