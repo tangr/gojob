@@ -9,7 +9,7 @@ import (
 )
 
 // semaphore
-var sem = make(chan struct{}, 1)
+// var sem = make(chan struct{}, 1)
 
 func (c *ControllerV1) JobRun(ctx context.Context, req *JobRunReq) (response *ghttp.Response, err error) {
 	r := g.RequestFromCtx(ctx)
@@ -23,23 +23,35 @@ func (c *ControllerV1) JobRun(ctx context.Context, req *JobRunReq) (response *gh
 	// }
 	// g.Log().Debug(ctx, "pipeline_body: ", pipeline_body)
 
-	select {
-	case sem <- struct{}{}:
-		// 获取执行权限
-		defer func() { <-sem }()
-		// 执行命令
-		task_run_result, err := service.Task.Run(job_id)
-		if err != nil {
-			r.Response.WriteStatusExit(500, err.Error())
-			return nil, err
+	task_run_result := service.Task.Run(job_id)
+	if task_run_result {
+		taskRunResult := map[string]interface{}{
+			"code":    200,
+			"message": "success",
+			"data":    "task triggered success",
 		}
-		g.Log().Debug(ctx, "task_run_result: ", task_run_result)
-
-		r.Response.Write(task_run_result)
-
-	case <-ctx.Done():
-		r.Response.WriteStatusExit(429, "too many concurrent commands")
+		r.Response.WriteJsonExit(taskRunResult)
+	} else {
+		r.Response.WriteStatusExit(429, "too many concurrent commands now, plz retry after a while!!")
 	}
+
+	// select {
+	// case sem <- struct{}{}:
+	// 	// 获取执行权限
+	// 	defer func() { <-sem }()
+	// 	// 执行命令
+	// 	task_run_result := service.Task.Run(job_id)
+	// 	if err != nil {
+	// 		r.Response.WriteStatusExit(500, err.Error())
+	// 		return nil, err
+	// 	}
+	// 	g.Log().Debug(ctx, "task_run_result: ", task_run_result)
+
+	// 	r.Response.Write(task_run_result)
+
+	// case <-ctx.Done():
+	// 	r.Response.WriteStatusExit(429, "too many concurrent commands")
+	// }
 
 	// r.Response.WriteExit(pipeline_body)
 	return nil, nil

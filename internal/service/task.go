@@ -21,7 +21,7 @@ type TaskResult struct {
 
 type ScriptObj = model.Script
 
-func (s *taskService) Run(job_id string) (*TaskResult, error) {
+func (s *taskService) Run(job_id string) bool {
 	ctx := context.Background()
 
 	jobId, err := strconv.Atoi(job_id)
@@ -29,7 +29,10 @@ func (s *taskService) Run(job_id string) (*TaskResult, error) {
 		fmt.Println("转换失败:", err)
 	}
 
-	agent.AgentCICD.HandleRecvJson2(ctx, jobId)
+	job_status := agent.AgentCICD.HandleRecvJson2(ctx, jobId)
+	if !job_status {
+		return false
+	}
 
 	// var script_obj ScriptObj = agent.AgentCICD.GetScriptByTask(jobId)
 	// script_body := script_obj.Body
@@ -42,10 +45,7 @@ func (s *taskService) Run(job_id string) (*TaskResult, error) {
 
 	g.Log().Debugf(ctx, "HandleJob GetScriptByTask MaxRunningJobs: %d", agent.MaxRunningJobs)
 
-	return &TaskResult{
-		Status: "status",
-		JobId:  job_id,
-	}, nil
+	return true
 }
 
 func (s *taskService) Abort(job_id string) (*TaskResult, error) {
