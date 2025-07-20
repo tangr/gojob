@@ -133,6 +133,9 @@ type CicdLogGetOneReq struct {
 type JobLogGetOneReq struct {
 	g.Meta `path:"/jobs/{pipeline_id}/{job_id}/log" tags:"ui" method:"get" summary:"JobLogGetOneReq"`
 }
+type JobAbortGetOneReq struct {
+	g.Meta `path:"/jobs/{pipeline_id}/{job_id}/abort" tags:"ui" method:"get" summary:"JobAbortGetOneReq"`
+}
 
 // type CicdGetListPkgsReq struct {
 // 	g.Meta `path:"/{id}/pkgs" tags:"ui" method:"get" summary:"CicdGetListPkgsReq"`
