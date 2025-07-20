@@ -157,8 +157,10 @@ func (c *ControllerV1) CicdJobGetOne(ctx context.Context, req *CicdJobGetOneReq)
 		"job_type":      job_type,
 		"job_status":    job_status,
 		"output":        output,
-		"tasks":         tasks,
 		"taskurl":       "/jobs/" + fmt.Sprint(pipeline_id) + "/",
+		"logurl":        "/jobs/" + fmt.Sprint(pipeline_id) + "/" + fmt.Sprint(job_id) + "/log",
+		"aborturl":      "/jobs/" + fmt.Sprint(pipeline_id) + "/" + fmt.Sprint(job_id) + "/abort",
+		// "tasks":         tasks,
 	}
 	g.Log().Debug(ctx, "CicdJobGetOne pipeline: ", pipeline)
 	g.Log().Debug(ctx, "CicdJobGetOne job: ", job)

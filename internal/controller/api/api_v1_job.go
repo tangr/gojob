@@ -63,3 +63,20 @@ func (c *ControllerV1) JobLog(ctx context.Context, req *JobLogReq) (response *gh
 
 	return
 }
+
+func (c *ControllerV1) JobGetLog(ctx context.Context, req *JobGetLogReq) (response *ghttp.Response, err error) {
+	r := g.RequestFromCtx(ctx)
+
+	pipeline_id := r.Get("pipeline_id").Int()
+	job_id := r.Get("job_id").Int()
+	g.Log().Debug(ctx, "JobGetLog pipeline_id job_id: ", pipeline_id, job_id)
+
+	pipeline_body, err := service.Cicd.JobGetLog(ctx, pipeline_id, job_id)
+	if err != nil {
+		return nil, err
+	}
+	g.Log().Debug(ctx, "pipeline_body: ", pipeline_body)
+
+	r.Response.WriteExit(pipeline_body)
+	return nil, nil
+}

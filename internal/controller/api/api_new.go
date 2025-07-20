@@ -38,6 +38,10 @@ type JobLogReq struct {
 	Output     string `json:"output" dc:"Output content"`
 }
 
+type JobGetLogReq struct {
+	g.Meta `path:"/job/{pipeline_id}/{job_id}/log" tags:"job log" method:"get" summary:"JobLogReq"`
+}
+
 type UpdateReq struct {
 	g.Meta `path:"/log/{id}" method:"put" tags:"Log" summary:"Update Log"`
 

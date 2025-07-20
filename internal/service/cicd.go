@@ -289,3 +289,18 @@ func (s *cicdService) GetOneLog(ctx context.Context, pipeline_id int, log_id int
 	}
 	return output, nil
 }
+
+func (s *cicdService) JobGetLog(ctx context.Context, pipeline_id int, job_id int) (*JobDetail, error) {
+	output := (*JobDetail)(nil)
+	// if !s.CheckTaskid(pipeline_id, log_id) {
+	// 	return output
+	// }
+	err := dao.CicdJob.Ctx(ctx).
+		Fields("job_status, output").
+		Where(g.Map{"id": job_id}).
+		Scan(&output)
+	if err != nil {
+		g.Log().Error(ctx, err)
+	}
+	return output, nil
+}
