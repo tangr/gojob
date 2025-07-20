@@ -29,6 +29,7 @@ type CicdJobColumns struct {
 	Script      string //
 	Comment     string //
 	Author      string //
+	Output      string //
 	CreatedAt   string //
 }
 
@@ -43,6 +44,7 @@ var cicdJobColumns = CicdJobColumns{
 	Script:      "script",
 	Comment:     "comment",
 	Author:      "author",
+	Output:      "output",
 	CreatedAt:   "created_at",
 }
 

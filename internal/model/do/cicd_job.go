@@ -20,5 +20,6 @@ type CicdJob struct {
 	Script      interface{} //
 	Comment     interface{} //
 	Author      interface{} //
+	Output      interface{} //
 	CreatedAt   interface{} //
 }

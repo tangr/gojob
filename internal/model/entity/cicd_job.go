@@ -15,5 +15,6 @@ type CicdJob struct {
 	Script      string `json:"script"      orm:"script"      description:""` //
 	Comment     string `json:"comment"     orm:"comment"     description:""` //
 	Author      string `json:"author"      orm:"author"      description:""` //
+	Output      string `json:"output"      orm:"output"      description:""` //
 	CreatedAt   uint64 `json:"createdAt"   orm:"created_at"  description:""` //
 }
