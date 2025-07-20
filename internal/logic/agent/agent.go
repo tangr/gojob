@@ -378,6 +378,7 @@ func (s *agentCICD) HandleJob2(ctx context.Context, job_id int) {
 			response, err := client.Put(ctx, url, sendMap)
 			if err != nil {
 				g.Log().Errorf(ctx, "发送状态更新失败: %v", err)
+				continue
 			}
 			res := response.ReadAll()
 			g.Log().Debugf(ctx, "Receive Put response: %s", gconv.String(res))
