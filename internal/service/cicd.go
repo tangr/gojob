@@ -205,7 +205,7 @@ func (s *cicdService) CreateJob(ctx context.Context, pipeline_id int, envs map[s
 	return job_id, nil
 }
 
-func (s *cicdService) CheckJobid(ctx context.Context, pipeline_id int, job_id int) bool {
+func (s *cicdService) CheckJobId(ctx context.Context, pipeline_id int, job_id int) bool {
 	num, err := dao.CicdJob.Ctx(ctx).
 		Where(g.Map{"pipeline_id": pipeline_id, "id": job_id}).
 		Count()
@@ -222,7 +222,7 @@ func (s *cicdService) CheckJobid(ctx context.Context, pipeline_id int, job_id in
 func (s *cicdService) GetListJobTasks(ctx context.Context, pipeline_id int, job_id int) []ListTasks {
 	var agentStatusMap map[string]int
 	tasks := ([]ListTasks)(nil)
-	if !s.CheckJobid(ctx, pipeline_id, job_id) {
+	if !s.CheckJobId(ctx, pipeline_id, job_id) {
 		return tasks
 	}
 	err := dao.CicdLog.Ctx(ctx).
