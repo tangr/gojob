@@ -104,7 +104,7 @@ func (c *ControllerV1) CicdJobCreate(ctx context.Context, req *CicdJobCreateReq)
 		return nil, err
 	}
 
-	jobURL := fmt.Sprintf("http://127.0.0.1:8001/agent/job/%d/run", job_id)
+	jobURL := service.Cicd.GetAgentByPipeline(ctx, pipeline_id) + fmt.Sprintf("/agent/job/%d/run", job_id)
 	agentResponse, err := g.Client().Get(ctx, jobURL)
 	if err != nil {
 		g.Log().Error(ctx, "调用 agent 失败: ", err)
@@ -256,7 +256,7 @@ func (c *ControllerV1) JobRunGetOne(ctx context.Context, req *JobRunGetOneReq) (
 	// }
 	var job_id int = r.Get("job_id").Int()
 
-	jobURL := fmt.Sprintf("http://127.0.0.1:8001/agent/job/%d/run", job_id)
+	jobURL := service.Cicd.GetAgentByPipeline(ctx, pipeline_id) + fmt.Sprintf("/agent/job/%d/run", job_id)
 	agentResponse, err := g.Client().Get(ctx, jobURL)
 	if err != nil {
 		g.Log().Error(ctx, "调用 agent 失败: ", err)
@@ -286,7 +286,7 @@ func (c *ControllerV1) JobAbortGetOne(ctx context.Context, req *JobAbortGetOneRe
 	// }
 	var job_id int = r.Get("job_id").Int()
 
-	jobURL := fmt.Sprintf("http://127.0.0.1:8001/agent/job/%d/abort", job_id)
+	jobURL := service.Cicd.GetAgentByPipeline(ctx, pipeline_id) + fmt.Sprintf("/agent/job/%d/abort", job_id)
 	agentResponse, err := g.Client().Get(ctx, jobURL)
 	if err != nil {
 		g.Log().Error(ctx, "调用 agent 失败: ", err)

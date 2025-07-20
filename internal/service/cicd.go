@@ -277,6 +277,29 @@ func (s *cicdService) GetOneJob(job_id int) (*JobDetail, error) {
 	}, nil
 }
 
+func (s *cicdService) GetAgentByPipeline(ctx context.Context, pipeline_id int) string {
+	var agentId string
+	// if !s.CheckTaskid(pipeline_id, log_id) {
+	// 	return output
+	// }
+	value, err := dao.CicdPipeline.Ctx(ctx).
+		Fields("agent_id").
+		Where(g.Map{"id": pipeline_id}).
+		Value()
+	if err != nil {
+		g.Log().Error(ctx, err)
+	}
+	agentId = value.String()
+	g.Log().Debug(ctx, "GetAgentByPipeline agentId: ", agentId)
+	agent_obj, err := Agent.GetAgent(agentId)
+	if err != nil {
+		g.Log().Error(ctx, err)
+	}
+	g.Log().Debug(ctx, "GetAgentByPipeline agent_obj: ", agent_obj)
+
+	return agent_obj.Ipaddr
+}
+
 func (s *cicdService) GetOneLog(ctx context.Context, pipeline_id int, log_id int) (*LogDetail, error) {
 	output := (*LogDetail)(nil)
 	// if !s.CheckTaskid(pipeline_id, log_id) {
