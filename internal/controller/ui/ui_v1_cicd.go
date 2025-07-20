@@ -146,7 +146,7 @@ func (c *ControllerV1) CicdJobGetOne(ctx context.Context, req *CicdJobGetOneReq)
 		g.Log().Debug(ctx, "CicdJobCreate err: ", err)
 		return nil, err
 	}
-	concurrency, job_type, job_status := job.Concurrency, job.JobType, job.JobStatus
+	concurrency, job_type, job_status, output := job.Concurrency, job.JobType, job.JobStatus, job.Output
 	params := g.Map{
 		"url":           "/jobs/" + fmt.Sprint(pipeline_id) + "/",
 		"apiurl":        "/v1/" + fmt.Sprint(pipeline_id, "/", job_id),
@@ -156,6 +156,7 @@ func (c *ControllerV1) CicdJobGetOne(ctx context.Context, req *CicdJobGetOneReq)
 		"concurrency":   concurrency,
 		"job_type":      job_type,
 		"job_status":    job_status,
+		"output":        output,
 		"tasks":         tasks,
 		"taskurl":       "/jobs/" + fmt.Sprint(pipeline_id) + "/",
 	}
@@ -163,13 +164,15 @@ func (c *ControllerV1) CicdJobGetOne(ctx context.Context, req *CicdJobGetOneReq)
 	g.Log().Debug(ctx, "CicdJobGetOne job: ", job)
 	g.Log().Debug(ctx, "CicdJobGetOne tasks: ", tasks)
 
-	if job_type == "BUILD" {
-		// r.Response.WriteExit(params)
-		r.Response.WriteTpl("cicd/job_build.html", params)
-	} else {
-		params["progressurl"] = "/" + fmt.Sprint(pipeline_id, "/", job_id) + "/progress"
-		r.Response.WriteTpl("cicd/job_deploy.html", params)
-	}
+	r.Response.WriteTpl("cicd/job_output.html", params)
+
+	// if job_type == "BUILD" {
+	// 	// r.Response.WriteExit(params)
+	// 	r.Response.WriteTpl("cicd/job_build.html", params)
+	// } else {
+	// 	params["progressurl"] = "/" + fmt.Sprint(pipeline_id, "/", job_id) + "/progress"
+	// 	r.Response.WriteTpl("cicd/job_deploy.html", params)
+	// }
 
 	// pipeline_body, err := service.Pipeline.GetOnebody(pipeline_id)
 	// if err != nil {

@@ -44,6 +44,7 @@ type JobDetail struct {
 	Concurrency int    `json:"concurrency"`
 	JobType     string `json:"job_type"`
 	JobStatus   string `json:"job_status"`
+	Output      string `json:output`
 }
 
 type LogDetail struct {
@@ -259,7 +260,7 @@ func (s *cicdService) GetOneJob(job_id int) (*JobDetail, error) {
 	ctx := context.Background()
 
 	record, err := dao.CicdJob.Ctx(ctx).
-		Fields("concurrency,job_type,job_status").
+		Fields("concurrency,job_type,job_status,output").
 		Where("id=?", job_id).
 		One()
 	if err != nil {
