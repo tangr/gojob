@@ -43,17 +43,16 @@ var AgentCICD = agentCICD{}
 type agentCICD struct{}
 
 var (
-	ctx                                   = context.Background()
-	apiUrl                                = g.Cfg().MustGet(ctx, "agent.ApiUrl").String()
-	syncInterval                          = g.Cfg().MustGet(ctx, "agent.SyncInterval").Int32()
+	ctx    = context.Background()
+	apiUrl = g.Cfg().MustGet(ctx, "agent.ApiUrl").String()
+	// syncInterval                          = g.Cfg().MustGet(ctx, "agent.SyncInterval").Int32()
 	dataPathDir                           = g.Cfg().MustGet(ctx, "agent.DataPathDir").String()
 	jobFlash                              = g.Cfg().MustGet(ctx, "agent.JobFlash").String()
 	MaxRunningJobs int                    = g.Cfg().MustGet(ctx, "agent.MaxRunningJobs").Int()
-	runningJobs    map[int]*gproc.Process = make(map[int]*gproc.Process)
+	RunningJobs    map[int]*gproc.Process = make(map[int]*gproc.Process)
 	envPrefix      string                 = g.Cfg().MustGet(ctx, "agent.EnvPrefix").String()
 	agents         AgentsList             = make(AgentsList, 0)
 	// agentInclude   string                 = g.Cfg().MustGet(ctx, "agent.Include").String()
-
 )
 
 type AgentsMap struct {
@@ -227,11 +226,11 @@ func (s *agentCICD) GetStatus(jobId int) string {
 
 func (s *agentCICD) KillJob(ctx context.Context, jobId int) bool {
 	g.Log().Warningf(ctx, "try to kill jobid: %d", jobId)
-	g.Log().Debugf(ctx, "runningJobs: %v", runningJobs)
-	if runningProcess, ok := runningJobs[jobId]; ok {
+	g.Log().Debugf(ctx, "runningJobs: %v", RunningJobs)
+	if runningProcess, ok := RunningJobs[jobId]; ok {
 		g.Log().Warningf(ctx, "kill jobid: %d, pid: %d ", jobId, runningProcess.Cmd.Process.Pid)
 		syscall.Kill(-runningProcess.Cmd.Process.Pid, syscall.SIGKILL)
-		delete(runningJobs, jobId)
+		delete(RunningJobs, jobId)
 
 		if err := s.SetStatus(jobId, "failed"); err != nil {
 			g.Log().Error(ctx, "job kill", runningProcess.Cmd.Process.Pid, err)
@@ -255,7 +254,7 @@ func (s *agentCICD) RunCommand(jobId int, runCommand string, scriptEnvs []string
 	if err := s.SetStatus(jobId, "running"); err != nil {
 		g.Log().Error(ctx, newpid, err)
 	}
-	runningJobs[jobId] = newprocess
+	RunningJobs[jobId] = newprocess
 	if err = newprocess.Wait(); err != nil {
 		g.Log().Warningf(ctx, "Command finished with error: %v", err)
 	}
@@ -273,7 +272,7 @@ func (s *agentCICD) RunCommand(jobId int, runCommand string, scriptEnvs []string
 				g.Log().Error(ctx, newpid, err)
 			}
 		}
-		delete(runningJobs, jobId)
+		delete(RunningJobs, jobId)
 	}
 }
 
@@ -419,7 +418,7 @@ func (s *agentCICD) HandleJob2(ctx context.Context, job_id int) {
 				jobPath := dataPathDir + strconv.Itoa(taskId)
 				jobPathOutput := jobPath + ".output"
 
-				if _, ok := runningJobs[taskId]; !ok {
+				if _, ok := RunningJobs[taskId]; !ok {
 					scriptBody := script_body + "\n"
 					scriptBody = strings.Replace(scriptBody, "\r\n", "\n", -1)
 					jobPathscriptBody := jobPath + ".scriptbody"
@@ -478,9 +477,9 @@ func (s *agentCICD) HandleJob2(ctx context.Context, job_id int) {
 }
 
 func (s *agentCICD) HandleRecvJson2(ctx context.Context, job_id int) bool {
-	g.Log().Debugf(ctx, "len runningJobs: %d %d", len(runningJobs), MaxRunningJobs)
-	if len(runningJobs) >= MaxRunningJobs {
-		if _, ok := runningJobs[job_id]; !ok {
+	g.Log().Debugf(ctx, "len runningJobs: %d %d", len(RunningJobs), MaxRunningJobs)
+	if len(RunningJobs) >= MaxRunningJobs {
+		if _, ok := RunningJobs[job_id]; !ok {
 			return false
 		}
 	}
