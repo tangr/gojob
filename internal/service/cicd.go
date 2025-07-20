@@ -43,8 +43,8 @@ type ListTasks struct {
 type JobDetail struct {
 	Concurrency int    `json:"concurrency"`
 	JobType     string `json:"job_type"`
-	JobStatus   string `json:"job_status"`
-	Output      string `json:output`
+	JobStatus   string `json:"status"`
+	Output      string `json:"output"`
 }
 
 type LogDetail struct {
