@@ -82,10 +82,6 @@ func init() {
 	client.SetHeaderMap(header)
 }
 
-// func main() {
-// 	AgentCICD.AgentRun()
-// }
-
 func (s *agentCICD) GetAgentsList(isreload bool) AgentsList {
 	if len(agents) != 0 && !isreload {
 		return agents
