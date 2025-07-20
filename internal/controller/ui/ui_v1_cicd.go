@@ -174,6 +174,7 @@ func (c *ControllerV1) CicdJobGetOne(ctx context.Context, req *CicdJobGetOneReq)
 		"taskurl":       "/jobs/" + fmt.Sprint(pipeline_id) + "/",
 		"logurl":        "/jobs/" + fmt.Sprint(pipeline_id) + "/" + fmt.Sprint(job_id) + "/log",
 		"aborturl":      "/jobs/" + fmt.Sprint(pipeline_id) + "/" + fmt.Sprint(job_id) + "/abort",
+		"run_url":       "/jobs/" + fmt.Sprint(pipeline_id) + "/" + fmt.Sprint(job_id) + "/run",
 		"Actived":       job.Updated_at,
 		// "tasks":         tasks,
 	}
