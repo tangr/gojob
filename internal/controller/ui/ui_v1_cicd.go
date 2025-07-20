@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"gojob/internal/service"
 	"net/http"
-	"strconv"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
@@ -104,21 +103,23 @@ func (c *ControllerV1) CicdJobCreate(ctx context.Context, req *CicdJobCreateReq)
 		return nil, err
 	}
 
-	jobURL := service.Cicd.GetAgentByPipeline(ctx, pipeline_id) + fmt.Sprintf("/agent/job/%d/run", job_id)
-	agentResponse, err := g.Client().Get(ctx, jobURL)
-	if err != nil {
-		g.Log().Error(ctx, "调用 agent 失败: ", err)
-		// 根据业务需求决定是否继续执行，这里假设继续执行
-		// 如果需要中断，可以 return nil, err
-	} else {
-		// 记录 agent 响应信息
-		g.Log().Debug(ctx, "Agent 响应状态码: ", agentResponse.StatusCode)
-		g.Log().Debug(ctx, "Agent 响应内容: ", agentResponse.ReadAllString())
-		agentResponse.Close()
-	}
+	// jobRunURL := service.Cicd.GetAgentByPipeline(ctx, pipeline_id) + fmt.Sprintf("/agent/job/%d/run", job_id)
+	// agentResponse, err := g.Client().Get(ctx, jobRunURL)
+	// if err != nil {
+	// 	g.Log().Error(ctx, "调用 agent 失败: ", err)
+	// 	// 根据业务需求决定是否继续执行，这里假设继续执行
+	// 	// 如果需要中断，可以 return nil, err
+	// } else {
+	// 	// 记录 agent 响应信息
+	// 	g.Log().Debug(ctx, "Agent 响应状态码: ", agentResponse.StatusCode)
+	// 	g.Log().Debug(ctx, "Agent 响应内容: ", agentResponse.ReadAllString())
+	// 	agentResponse.Close()
+	// }
 
-	redirectURL := "/jobs/" + fmt.Sprint(pipeline_id) + "/" + strconv.FormatInt(job_id, 10)
-	r.Response.Header().Add("Location", redirectURL)
+	jobRunURL := "/jobs/" + fmt.Sprint(pipeline_id) + fmt.Sprintf("/%d/run", job_id)
+
+	// redirectURL := "/jobs/" + fmt.Sprint(pipeline_id) + "/" + strconv.FormatInt(job_id, 10)
+	r.Response.Header().Add("Location", jobRunURL)
 	r.Response.WriteStatus(302)
 	r.Response.WriteExit()
 
