@@ -55,11 +55,11 @@ func (c *ControllerV1) JobLog(ctx context.Context, req *JobLogReq) (response *gh
 		Output:     req.Output,
 	}).WherePri(job_id).Update()
 
-	// if req.JobType == "BUILD" {
-	// 	_, err = dao.CicdJob.Ctx(ctx).Data(do.CicdJob{
-	// 		JobStatus: req.TaskStatus,
-	// 	}).WherePri(req.JobId).Update()
-	// }
+	if req.JobType == "BUILD" {
+		_, err = dao.CicdJob.Ctx(ctx).Data(do.CicdJob{
+			JobStatus: req.TaskStatus,
+		}).WherePri(req.JobId).Update()
+	}
 
 	return
 }
