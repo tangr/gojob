@@ -28,7 +28,7 @@ func (c *ControllerV1) JobRun(ctx context.Context, req *JobRunReq) (response *gh
 		taskRunResult := map[string]interface{}{
 			"code":    200,
 			"message": "success",
-			"data":    "task triggered success",
+			"data":    "task trigger success",
 		}
 		r.Response.WriteJsonExit(taskRunResult)
 	} else {
@@ -63,12 +63,17 @@ func (c *ControllerV1) JobAbort(ctx context.Context, req *JobAbortReq) (response
 	job_id := r.Get("id").String()
 	g.Log().Debug(ctx, "job_id: ", job_id)
 
-	err = r.Response.WriteTpl("cicd/list.html", g.Map{
-		"Title":          "111欢迎页面",
-		"Content":        "aaaa:bbb:ccc",
-		"url":            "/",
-		"pipelines":      "pipelines",
-		"newPipelineUrl": "/pipelines/new",
-	})
+	task_run_result := service.Task.Abort(job_id)
+	if task_run_result {
+		taskRunResult := map[string]interface{}{
+			"code":    200,
+			"message": "success",
+			"data":    "task abort success",
+		}
+		r.Response.WriteJsonExit(taskRunResult)
+	} else {
+		r.Response.WriteStatusExit(429, "job abort failed, plz retry!!!")
+	}
+
 	return nil, err
 }

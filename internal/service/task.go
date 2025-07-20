@@ -6,8 +6,6 @@ import (
 	"gojob/internal/logic/agent"
 	"gojob/internal/model"
 	"strconv"
-
-	"github.com/gogf/gf/v2/frame/g"
 )
 
 var Task = taskService{}
@@ -43,13 +41,19 @@ func (s *taskService) Run(job_id string) bool {
 	// g.Log().Debugf(ctx, "HandleJob GetScriptByTask script_args: %s", script_args)
 	// g.Log().Debugf(ctx, "HandleJob GetScriptByTask script_envs: %s", script_envs)
 
-	g.Log().Debugf(ctx, "HandleJob GetScriptByTask MaxRunningJobs: %d", agent.MaxRunningJobs)
+	// g.Log().Debugf(ctx, "HandleJob GetScriptByTask MaxRunningJobs: %d", agent.MaxRunningJobs)
 
 	return true
 }
 
-func (s *taskService) Abort(job_id string) (*TaskResult, error) {
-	return &TaskResult{
-		Status: "status",
-	}, nil
+func (s *taskService) Abort(job_id string) bool {
+	ctx := context.Background()
+	jobId, err := strconv.Atoi(job_id)
+	if err != nil {
+		fmt.Println("转换失败:", err)
+	}
+
+	job_status := agent.AgentCICD.KillJob(ctx, jobId)
+
+	return job_status
 }

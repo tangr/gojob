@@ -225,16 +225,20 @@ func (s *agentCICD) GetStatus(jobId int) string {
 	return jobMeta.JobStatus
 }
 
-func (s *agentCICD) KillJob(jobId int) {
+func (s *agentCICD) KillJob(ctx context.Context, jobId int) bool {
+	g.Log().Warningf(ctx, "try to kill jobid: %d", jobId)
+	g.Log().Debugf(ctx, "runningJobs: %v", runningJobs)
 	if runningProcess, ok := runningJobs[jobId]; ok {
 		g.Log().Warningf(ctx, "kill jobid: %d, pid: %d ", jobId, runningProcess.Cmd.Process.Pid)
 		syscall.Kill(-runningProcess.Cmd.Process.Pid, syscall.SIGKILL)
 		delete(runningJobs, jobId)
 
 		if err := s.SetStatus(jobId, "failed"); err != nil {
-			g.Log().Error(ctx, runningProcess.Cmd.Process.Pid, err)
+			g.Log().Error(ctx, "job kill", runningProcess.Cmd.Process.Pid, err)
+			return false
 		}
 	}
+	return true
 }
 
 func (s *agentCICD) RunCommand(jobId int, runCommand string, scriptEnvs []string) {
