@@ -247,7 +247,37 @@ func (c *ControllerV1) JobLogGetOne(ctx context.Context, req *JobLogGetOneReq) (
 	return nil, nil
 }
 
-func (c *ControllerV1) JobAbortGetOneReq(ctx context.Context, req *JobAbortGetOneReq) (response *ghttp.Response, err error) {
+func (c *ControllerV1) JobRunGetOne(ctx context.Context, req *JobRunGetOneReq) (response *ghttp.Response, err error) {
+	r := g.RequestFromCtx(ctx)
+
+	var pipeline_id int = r.Get("pipeline_id").Int()
+	// if !service.CheckAuthor(r.Context(), pipeline_id) {
+	// 	r.Response.WriteStatus(http.StatusForbidden)
+	// }
+	var job_id int = r.Get("job_id").Int()
+
+	jobURL := fmt.Sprintf("http://127.0.0.1:8001/agent/job/%d/run", job_id)
+	agentResponse, err := g.Client().Get(ctx, jobURL)
+	if err != nil {
+		g.Log().Error(ctx, "调用 agent 失败: ", err)
+		// 根据业务需求决定是否继续执行，这里假设继续执行
+		// 如果需要中断，可以 return nil, err
+	} else {
+		// 记录 agent 响应信息
+		g.Log().Debug(ctx, "Agent 响应状态码: ", agentResponse.StatusCode)
+		g.Log().Debug(ctx, "Agent 响应内容: ", agentResponse.ReadAllString())
+		agentResponse.Close()
+	}
+
+	redirectURL := "/jobs/" + fmt.Sprint(pipeline_id) + "/" + fmt.Sprint(job_id)
+	r.Response.Header().Add("Location", redirectURL)
+	r.Response.WriteStatus(302)
+	r.Response.WriteExit()
+
+	return nil, nil
+}
+
+func (c *ControllerV1) JobAbortGetOne(ctx context.Context, req *JobAbortGetOneReq) (response *ghttp.Response, err error) {
 	r := g.RequestFromCtx(ctx)
 
 	var pipeline_id int = r.Get("pipeline_id").Int()
