@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 	"syscall"
 	"time"
 
@@ -50,6 +51,7 @@ var (
 	jobFlash                              = g.Cfg().MustGet(ctx, "agent.JobFlash").String()
 	MaxRunningJobs int                    = g.Cfg().MustGet(ctx, "agent.MaxRunningJobs").Int()
 	RunningJobs    map[int]*gproc.Process = make(map[int]*gproc.Process)
+	jobsMutex      sync.RWMutex           // Mutex to protect RunningJobs map
 	envPrefix      string                 = g.Cfg().MustGet(ctx, "agent.EnvPrefix").String()
 	agents         AgentsList             = make(AgentsList, 0)
 	// agentInclude   string                 = g.Cfg().MustGet(ctx, "agent.Include").String()
@@ -225,8 +227,12 @@ func (s *agentCICD) GetStatus(jobId int) string {
 }
 
 func (s *agentCICD) KillJob(ctx context.Context, jobId int) bool {
-	g.Log().Warningf(ctx, "try to kill jobid: %d", jobId)
+	// Lock for reading and writing RunningJobs map
+	jobsMutex.Lock()
+	defer jobsMutex.Unlock()
+
 	g.Log().Debugf(ctx, "runningJobs: %v", RunningJobs)
+	g.Log().Warningf(ctx, "try to kill jobid: %d", jobId)
 	if runningProcess, ok := RunningJobs[jobId]; ok {
 		g.Log().Warningf(ctx, "kill jobid: %d, pid: %d ", jobId, runningProcess.Cmd.Process.Pid)
 		syscall.Kill(-runningProcess.Cmd.Process.Pid, syscall.SIGKILL)
@@ -254,7 +260,13 @@ func (s *agentCICD) RunCommand(jobId int, runCommand string, scriptEnvs []string
 	if err := s.SetStatus(jobId, "running"); err != nil {
 		g.Log().Error(ctx, newpid, err)
 	}
+
+	// Lock for writing to RunningJobs map
+	jobsMutex.Lock()
 	RunningJobs[jobId] = newprocess
+	g.Log().Debugf(ctx, "RunCommand RunningJobs: %v", RunningJobs)
+	jobsMutex.Unlock()
+
 	if err = newprocess.Wait(); err != nil {
 		g.Log().Warningf(ctx, "Command finished with error: %v", err)
 	}
@@ -272,7 +284,11 @@ func (s *agentCICD) RunCommand(jobId int, runCommand string, scriptEnvs []string
 				g.Log().Error(ctx, newpid, err)
 			}
 		}
+
+		// Lock for deleting from RunningJobs map
+		jobsMutex.Lock()
 		delete(RunningJobs, jobId)
+		jobsMutex.Unlock()
 	}
 }
 
@@ -319,7 +335,12 @@ func (s *agentCICD) HandleJob2(ctx context.Context, job_id int) {
 				jobPath := dataPathDir + strconv.Itoa(taskId)
 				jobPathOutput := jobPath + ".output"
 
-				if _, ok := RunningJobs[taskId]; !ok {
+				// Lock for reading RunningJobs map
+				jobsMutex.RLock()
+				_, jobExists := RunningJobs[taskId]
+				jobsMutex.RUnlock()
+
+				if !jobExists {
 					scriptBody := script_body + "\n"
 					scriptBody = strings.Replace(scriptBody, "\r\n", "\n", -1)
 					jobPathscriptBody := jobPath + ".scriptbody"
@@ -378,9 +399,15 @@ func (s *agentCICD) HandleJob2(ctx context.Context, job_id int) {
 }
 
 func (s *agentCICD) HandleRecvJson2(ctx context.Context, job_id int) bool {
-	g.Log().Debugf(ctx, "len runningJobs: %d %d", len(RunningJobs), MaxRunningJobs)
-	if len(RunningJobs) >= MaxRunningJobs {
-		if _, ok := RunningJobs[job_id]; !ok {
+	// Lock for reading RunningJobs map length
+	jobsMutex.RLock()
+	runningJobsCount := len(RunningJobs)
+	_, jobExists := RunningJobs[job_id]
+	jobsMutex.RUnlock()
+
+	g.Log().Debugf(ctx, "len runningJobs: %d %d", runningJobsCount, MaxRunningJobs)
+	if runningJobsCount >= MaxRunningJobs {
+		if !jobExists {
 			return false
 		}
 	}
