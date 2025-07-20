@@ -473,7 +473,7 @@ func (s *agentCICD) HandleJob2(ctx context.Context, job_id int) {
 
 }
 
-func (s *agentCICD) HandleRecvJson2(job_id int) {
+func (s *agentCICD) HandleRecvJson2(ctx context.Context, job_id int) {
 	g.Log().Debugf(ctx, "len runningJobs: %d %d", len(runningJobs), MaxRunningJobs)
 	if len(runningJobs) >= MaxRunningJobs {
 		if _, ok := runningJobs[job_id]; !ok {

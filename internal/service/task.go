@@ -16,6 +16,7 @@ type taskService struct{}
 
 type TaskResult struct {
 	Status string `json:"status"`
+	JobId  string `json:"jobid"`
 }
 
 type ScriptObj = model.Script
@@ -28,21 +29,22 @@ func (s *taskService) Run(job_id string) (*TaskResult, error) {
 		fmt.Println("转换失败:", err)
 	}
 
-	agent.AgentCICD.HandleRecvJson2(jobId)
+	agent.AgentCICD.HandleRecvJson2(ctx, jobId)
 
-	var script_obj ScriptObj = agent.AgentCICD.GetScriptByTask(jobId)
-	script_body := script_obj.Body
-	script_envs := script_obj.Envs
-	script_args := script_obj.Args
+	// var script_obj ScriptObj = agent.AgentCICD.GetScriptByTask(jobId)
+	// script_body := script_obj.Body
+	// script_envs := script_obj.Envs
+	// script_args := script_obj.Args
 
-	g.Log().Debugf(ctx, "HandleJob GetScriptByTask script_body: %s", script_body)
-	g.Log().Debugf(ctx, "HandleJob GetScriptByTask script_args: %s", script_args)
-	g.Log().Debugf(ctx, "HandleJob GetScriptByTask script_envs: %s", script_envs)
+	// g.Log().Debugf(ctx, "HandleJob GetScriptByTask script_body: %s", script_body)
+	// g.Log().Debugf(ctx, "HandleJob GetScriptByTask script_args: %s", script_args)
+	// g.Log().Debugf(ctx, "HandleJob GetScriptByTask script_envs: %s", script_envs)
 
 	g.Log().Debugf(ctx, "HandleJob GetScriptByTask MaxRunningJobs: %d", agent.MaxRunningJobs)
 
 	return &TaskResult{
 		Status: "status",
+		JobId:  job_id,
 	}, nil
 }
 
