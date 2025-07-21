@@ -4,7 +4,7 @@ server:
   openapiPath: "/api.json"
   swaggerPath: "/swagger"
   server-root: "resource/public"
-  cas-sso: false
+  # cas-sso: true
   accessLogEnabled: true
   logger:
     level: "info"
