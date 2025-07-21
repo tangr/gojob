@@ -37,7 +37,12 @@ func AuthenMiddleware(r *ghttp.Request) {
 	if usernameVar == nil || ticketVar == nil {
 		currentUrl := r.URL.String()
 		loginUrl := fmt.Sprintf("/login?returnUrl=%s", url.QueryEscape(currentUrl))
-		r.Response.RedirectTo(loginUrl)
+		// r.Response.RedirectTo(loginUrl)
+
+		redirectURL := loginUrl
+		r.Response.Header().Add("Location", redirectURL)
+		r.Response.WriteStatus(302)
+		r.Response.WriteExit()
 		return
 	}
 
@@ -51,7 +56,11 @@ func AuthenMiddleware(r *ghttp.Request) {
 				r.Session.RemoveAll()
 				currentUrl := r.URL.String()
 				loginUrl := fmt.Sprintf("/login?returnUrl=%s", url.QueryEscape(currentUrl))
-				r.Response.RedirectTo(loginUrl)
+				// r.Response.RedirectTo(loginUrl)
+				redirectURL := loginUrl
+				r.Response.Header().Add("Location", redirectURL)
+				r.Response.WriteStatus(302)
+				r.Response.WriteExit()
 				return
 			}
 			r.Session.Set("last_validate_time", time.Now())

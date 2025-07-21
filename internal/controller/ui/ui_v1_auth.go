@@ -73,7 +73,9 @@ func (c *ControllerV1) AuthCallback(ctx context.Context, req *AuthCallbackReq) (
 		return
 	}
 
-	r.Session.Set("user", username)
+	g.Log().Debug(ctx, "AuthCallback username: ", username)
+
+	r.Session.Set("username", username)
 	r.Session.Set("userid", userid)
 	r.Session.Set("ticket", ticket)
 	r.Session.Set("last_validate_time", time.Now())
@@ -90,11 +92,19 @@ func (c *ControllerV1) AuthCallback(ctx context.Context, req *AuthCallbackReq) (
 	// 使用后删除
 	r.Session.Remove("returnUrl")
 
+	var redirectURL string
+
 	if returnUrl != "" {
-		r.Response.RedirectTo(returnUrl)
+		// r.Response.RedirectTo(returnUrl)
+		redirectURL = returnUrl
 	} else {
-		r.Response.RedirectTo("/dashboard")
+		// r.Response.RedirectTo("/dashboard")
+		redirectURL = "/dashboard"
 	}
+
+	r.Response.Header().Add("Location", redirectURL)
+	r.Response.WriteStatus(302)
+	r.Response.WriteExit()
 
 	return nil, err
 }
@@ -109,7 +119,12 @@ func (c *ControllerV1) AuthLogout(ctx context.Context, req *AuthLogoutReq) (resp
 		common.Cfg.LogoutURL,
 		common.Cfg.ServiceURL,
 	)
-	r.Response.RedirectTo(logoutURL)
+	// r.Response.RedirectTo(logoutURL)
+
+	redirectURL := logoutURL
+	r.Response.Header().Add("Location", redirectURL)
+	r.Response.WriteStatus(302)
+	r.Response.WriteExit()
 
 	return nil, err
 }
