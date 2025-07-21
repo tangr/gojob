@@ -11,15 +11,20 @@
         margin: 0;
     }
 
-    .maincontainer {
-        margin-top: 2em;
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; /* 保证撑满整个视口 */
+    }
 
-        min-height: 100%;
-        /* margin-bottom: -200px; */
+    .maincontainer {
+      flex: 1; /* 关键：自动撑满剩余空间 */
+      margin-top: 2em;
     }
 
     .ui.footer.segment {
-        margin: 5em 0em 0em;
-        /* padding: 5em 0em; */
+      margin: 0; /* 避免下方额外空隙 */
+      padding: 2em 0em;
     }
+
 </style>

@@ -2,11 +2,14 @@
 <html>
 <head>
     <title>{{.pipeline_name|shortName}} - CICD</title>
+    <meta charset="UTF-8">
 
     {{include "base_head.html" .}}
 
 </head>
 <body>
+
+  <div class="wrapper">
 
 <div class="ui container maincontainer">
 
@@ -60,11 +63,12 @@
 
     <!-- <i class="ui active large loader"></i> -->
 
-
 </div>
 
-
 {{include "base_foot.html" .}}
+
+  </div>
+
 
 
 <div class="ui tiny modal">
