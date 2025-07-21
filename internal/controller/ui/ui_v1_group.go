@@ -21,6 +21,7 @@ func (c *ControllerV1) GroupGetList(ctx context.Context, req *GroupGetListReq) (
 		"url":         "/groups/",
 		"groups":      groups,
 		"newGroupUrl": "/groupnew",
+		"page_name":   "Groups",
 	})
 	return nil, err
 }
@@ -32,6 +33,7 @@ func (c *ControllerV1) GroupNew(ctx context.Context, req *GroupNewReq) (response
 		"url": "/groups/",
 		// "groups":      groups,
 		"newGroupUrl": "/groups",
+		"page_name":   "New Group",
 	})
 	return nil, err
 }
@@ -63,6 +65,7 @@ func (c *ControllerV1) GroupGetOne(ctx context.Context, req *GroupGetOneReq) (re
 		"url":        "/groups/",
 		"apiurl":     "/groups/" + group_id + "/put",
 		"group_name": group_name,
+		"page_name":  "Groups",
 	})
 	return nil, err
 }
