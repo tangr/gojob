@@ -21,6 +21,7 @@ func (c *ControllerV1) UserGetList(ctx context.Context, req *UserGetListReq) (re
 		"url":         "/users/",
 		"users":       users,
 		"newUsersUrl": "/usernew",
+		"page_name":   "Users",
 	})
 	return nil, err
 }
@@ -36,6 +37,7 @@ func (c *ControllerV1) UserNew(ctx context.Context, req *UserNewReq) (response *
 		"url":        "/users/",
 		"groups":     groups,
 		"newUserUrl": "/users",
+		"page_name":  "New User",
 	})
 	return nil, err
 }
@@ -84,6 +86,7 @@ func (c *ControllerV1) UserGetOne(ctx context.Context, req *UserGetOneReq) (resp
 		"username":   user.Username,
 		"allgroups":  allgroups,
 		"usergroups": user.GroupId,
+		"page_name":  "Show User",
 	})
 	return nil, err
 }
