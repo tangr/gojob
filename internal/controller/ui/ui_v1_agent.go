@@ -21,6 +21,7 @@ func (c *ControllerV1) AgentGetList(ctx context.Context, req *AgentGetListReq) (
 		"url":         "/agents/",
 		"agents":      agents,
 		"newAgentUrl": "/agentnew",
+		"page_name":   "Agents",
 	})
 	return nil, err
 }
@@ -31,6 +32,7 @@ func (c *ControllerV1) AgentNew(ctx context.Context, req *AgentNewReq) (response
 	err = r.Response.WriteTpl("agents/new.html", g.Map{
 		"url":         "/agents",
 		"newAgentUrl": "/agents",
+		"page_name":   "New Agent",
 	})
 	return nil, err
 }
@@ -67,6 +69,7 @@ func (c *ControllerV1) AgentGetOne(ctx context.Context, req *AgentGetOneReq) (re
 		"url":          "/agents/",
 		"apiurl":       "/agents/" + agent_id + "/put",
 		"agent_name":   agent.Agent_name,
+		"page_name":    agent.Agent_name,
 		"agent_ipaddr": agent.Ipaddr,
 	})
 	return nil, err
