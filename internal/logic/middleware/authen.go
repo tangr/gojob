@@ -26,7 +26,7 @@ func AuthenMiddleware(r *ghttp.Request) {
 		return
 	}
 
-	usernameVar, _ := r.Session.Get("user")
+	usernameVar, _ := r.Session.Get("username")
 	useridVar, _ := r.Session.Get("userid")
 	ticketVar, _ := r.Session.Get("ticket")
 
