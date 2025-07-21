@@ -41,7 +41,7 @@ func (c *ControllerV1) ScriptCreate(ctx context.Context, req *ScriptCreateReq) (
 
 	var script_name string = r.Get("script_name").String()
 	var script_body string = r.Get("script_body").String()
-	var script_author string = "tangshoubin"
+	var script_author string = r.Session.MustGet("user").String()
 	script_body = strings.Replace(script_body, "\r\n", "\n", -1)
 
 	script_id := service.Script.New(script_name, script_body, script_author)

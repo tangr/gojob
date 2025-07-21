@@ -94,7 +94,7 @@ func (c *ControllerV1) CicdJobCreate(ctx context.Context, req *CicdJobCreateReq)
 	// 	r.Response.RedirectTo(UrlPrefix + "/forbidden")
 	// }
 	// var username string = service.Session.GetUser(r.Context()).Email
-	var username string = "tangshoubin"
+	var username string = r.Session.MustGet("user").String()
 	envs := r.GetFormMap()
 	job_id, err := service.Cicd.CreateJob(ctx, pipeline_id, envs, username)
 	g.Log().Debug(ctx, "CicdJobCreate job_id: ", job_id)
