@@ -10,6 +10,7 @@ import (
 	"gojob/internal/controller/agent"
 	"gojob/internal/controller/api"
 	"gojob/internal/controller/ui"
+	"gojob/internal/logic/middleware"
 )
 
 var (
@@ -21,6 +22,7 @@ var (
 			s := g.Server()
 			s.Group("/", func(group *ghttp.RouterGroup) {
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
+				group.Middleware(middleware.AuthenMiddleware)
 				group.Bind(
 					ui.NewV1(),
 				)
