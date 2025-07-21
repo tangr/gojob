@@ -21,6 +21,7 @@ func (c *ControllerV1) PipelineGetList(ctx context.Context, req *PipelineGetList
 		"url":            "/pipelines/",
 		"pipelines":      pipelines,
 		"newPipelineUrl": "/pipelinenew",
+		"page_name":      "Pipelines",
 	})
 	return nil, err
 }
@@ -43,6 +44,7 @@ func (c *ControllerV1) PipelineNew(ctx context.Context, req *PipelineNewReq) (re
 		"groups":         groups,
 		"agents":         agents,
 		"newPipelineUrl": "/pipelines/",
+		"page_name":      "New Pipeline",
 	})
 	return nil, err
 }
@@ -101,6 +103,7 @@ func (c *ControllerV1) PipelineGetOne(ctx context.Context, req *PipelineGetOneRe
 		"pipeline_group": pipeline.GroupId,
 		"pipeline_agent": pipeline.AgentId,
 		"pipeline_body":  pipeline.PipelineBody,
+		"page_name":      pipeline.PipelineName,
 	})
 	return nil, err
 }
