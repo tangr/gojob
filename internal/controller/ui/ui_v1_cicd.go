@@ -22,6 +22,7 @@ func (c *ControllerV1) CicdGetList(ctx context.Context, req *CicdGetListReq) (re
 		"url":            "/jobs/",
 		"pipelines":      pipelines,
 		"newPipelineUrl": "/pipelinenew",
+		"page_name":      "List",
 	})
 	return nil, err
 }
@@ -57,6 +58,7 @@ func (c *ControllerV1) CicdGetOne(ctx context.Context, req *CicdGetOneReq) (resp
 		"jobs":          jobs,
 		"page":          service.Cicd.PageContent(page),
 		"envurl":        "/v1/" + fmt.Sprint(pipeline_id) + "/",
+		"page_name":     pipeline.PipelineName,
 
 		// "url":           "/pipelines/",
 		// "apiurl": "/v1/pipelines/" + fmt.Sprint(pipeline_id),
@@ -176,6 +178,7 @@ func (c *ControllerV1) CicdJobGetOne(ctx context.Context, req *CicdJobGetOneReq)
 		"aborturl":      "/jobs/" + fmt.Sprint(pipeline_id) + "/" + fmt.Sprint(job_id) + "/abort",
 		"run_url":       "/jobs/" + fmt.Sprint(pipeline_id) + "/" + fmt.Sprint(job_id) + "/run",
 		"Actived":       job.Updated_at,
+		"page_name":     pipeline_name,
 		// "tasks":         tasks,
 	}
 	g.Log().Debug(ctx, "CicdJobGetOne pipeline: ", pipeline)
