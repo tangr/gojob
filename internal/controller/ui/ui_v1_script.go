@@ -22,6 +22,7 @@ func (c *ControllerV1) ScriptGetList(ctx context.Context, req *ScriptGetListReq)
 		"url":          "/scripts/",
 		"scripts":      scripts,
 		"newScriptUrl": "/scriptnew",
+		"page_name":    "Scripts",
 	})
 	return nil, err
 }
@@ -32,6 +33,7 @@ func (c *ControllerV1) ScriptNew(ctx context.Context, req *ScriptNewReq) (respon
 	err = r.Response.WriteTpl("scripts/new.html", g.Map{
 		"url":          "/scripts/",
 		"newScriptUrl": "/scripts/",
+		"page_name":    "New Script",
 	})
 	return nil, err
 }
@@ -72,6 +74,7 @@ func (c *ControllerV1) ScriptGetOne(ctx context.Context, req *ScriptGetOneReq) (
 		"script_id":   script_id,
 		"script_name": script_obj.Script_name,
 		"script_body": script_obj.Script_Body,
+		"page_name":   script_obj.Script_name,
 	})
 	return nil, err
 }
