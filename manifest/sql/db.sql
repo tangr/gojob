@@ -25,7 +25,9 @@ CREATE TABLE IF NOT EXISTS `cicd_job` (
   `script` JSON NOT NULL,
   `comment` varchar(255) NOT NULL,
   `author` varchar(255) NOT NULL,
+  `output` longtext DEFAULT NULL,
   `created_at` bigint(10) UNSIGNED NOT NULL,
+  `updated_at` bigint(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -39,8 +41,7 @@ CREATE TABLE IF NOT EXISTS `cicd_log` (
   `ipaddr` varchar(255) NOT NULL,
   `updated_at` bigint(10) UNSIGNED NOT NULL,
   `output` longtext DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `log_id` (`job_id`, `ipaddr`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `cicd_package` (
