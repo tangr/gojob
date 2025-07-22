@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"gojob/internal/dao"
 	"math/rand"
 
@@ -44,9 +46,40 @@ func (s *commService) RandSeq(randlen int) string {
 
 func (s *commService) GetScriptBody(script_name string) string {
 	ctx := context.Background()
-	script_body, err := dao.CicdScript.Ctx(ctx).Fields("script_body").Where("script_name=", script_name).Value()
+	script_body, err := dao.CicdScript.Ctx(ctx).
+		Fields("script_body").Where("script_name=", script_name).Value()
 	if err != nil {
 		g.Log().Error(ctx, err)
 	}
 	return script_body.String()
+}
+
+func stringToSlice(str string) []string {
+	ctx := context.Background()
+
+	var newslice []string = make([]string, 0)
+	err := json.Unmarshal([]byte(str), &newslice)
+	if err != nil {
+		g.Log().Errorf(ctx, "stringToSlice: ", err)
+	}
+	return newslice
+}
+
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
+}
+
+func (s *commService) CheckAuthor(ctx context.Context, pipeline_id int) bool {
+	r := g.RequestFromCtx(ctx)
+	var user_id int = r.Session.MustGet("userid").Int()
+
+	group_id_user := User.GetGroupId(user_id)
+	group_id_pipeline := Pipeline.GetGroupId(pipeline_id)
+
+	return stringInSlice(fmt.Sprint(group_id_pipeline), group_id_user)
 }

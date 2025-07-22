@@ -25,6 +25,10 @@ type UserDetail struct {
 	GroupId  string `json:"groups"`
 }
 
+type UserGroupIds struct {
+	GroupId string `json:"group_id"`
+}
+
 func (s *userService) GetListUsers(ctx context.Context) (users []ListUsers, err error) {
 	if err = dao.CicdUser.Ctx(ctx).
 		Fields("id,username,updated_at").
@@ -131,4 +135,23 @@ func (s *userService) GetOneUsername(user_name string) (int, error) {
 	}
 
 	return record["id"].Int(), nil
+}
+
+func (s *userService) GetGroupId(user_id int) []string {
+	ctx := context.Background()
+
+	var group_ids *UserGroupIds
+
+	err := dao.CicdUser.Ctx(ctx).
+		Fields("group_id").
+		Where("id=", user_id).
+		Scan(&group_ids)
+	if err != nil {
+		g.Log().Error(ctx, "GetGroupId: ", err)
+	}
+
+	new_group_ids := group_ids.GroupId
+	new_group_slice := stringToSlice(new_group_ids)
+
+	return new_group_slice
 }

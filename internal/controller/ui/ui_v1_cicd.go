@@ -31,9 +31,11 @@ func (c *ControllerV1) CicdGetOne(ctx context.Context, req *CicdGetOneReq) (resp
 	r := g.RequestFromCtx(ctx)
 
 	var pipeline_id int = r.Get("id").Int()
-	// if !service.CheckAuthor(r.Context(), pipeline_id) {
-	// 	r.Response.RedirectTo(UrlPrefix + "/forbidden")
-	// }
+
+	if !service.Comm.CheckAuthor(ctx, pipeline_id) {
+		r.Response.RedirectTo("/forbidden")
+		return nil, err
+	}
 
 	pipeline, err := service.Pipeline.GetOne(pipeline_id)
 	if err != nil {
@@ -77,9 +79,11 @@ func (c *ControllerV1) CicdBodyGetOne(ctx context.Context, req *CicdBodyGetOneRe
 	r := g.RequestFromCtx(ctx)
 
 	var pipeline_id int = r.Get("id").Int()
-	// if !service.CheckAuthor(r.Context(), pipeline_id) {
-	// 	r.Response.RedirectTo(UrlPrefix + "/forbidden")
-	// }
+
+	if !service.Comm.CheckAuthor(ctx, pipeline_id) {
+		r.Response.RedirectTo("/forbidden")
+		return nil, err
+	}
 
 	pipeline_body, err := service.Pipeline.GetOnebody(pipeline_id)
 	if err != nil {
@@ -95,9 +99,12 @@ func (c *ControllerV1) CicdJobCreate(ctx context.Context, req *CicdJobCreateReq)
 	r := g.RequestFromCtx(ctx)
 
 	var pipeline_id int = r.Get("pipeline_id").Int()
-	// if !service.CheckAuthor(r.Context(), pipeline_id) {
-	// 	r.Response.RedirectTo(UrlPrefix + "/forbidden")
-	// }
+
+	if !service.Comm.CheckAuthor(ctx, pipeline_id) {
+		r.Response.RedirectTo("/forbidden")
+		return nil, err
+	}
+
 	// var username string = service.Session.GetUser(r.Context()).Email
 	var username string = r.Session.MustGet("username").String()
 	envs := r.GetFormMap()
@@ -140,16 +147,13 @@ func (c *ControllerV1) CicdJobCreate(ctx context.Context, req *CicdJobCreateReq)
 func (c *ControllerV1) CicdJobGetOne(ctx context.Context, req *CicdJobGetOneReq) (response *ghttp.Response, err error) {
 	r := g.RequestFromCtx(ctx)
 
-	// var pipeline_id int = r.Get("pipeline_id").Int()
-	// var job_id int = r.Get("job_id").Int()
-	// // if !service.CheckAuthor(r.Context(), pipeline_id) {
-	// // 	r.Response.RedirectTo(UrlPrefix + "/forbidden")
-	// // }
-
 	var pipeline_id int = r.Get("pipeline_id").Int()
-	// if !service.CheckAuthor(r.Context(), pipeline_id) {
-	// 	r.Response.RedirectTo("/forbidden")
-	// }
+
+	if !service.Comm.CheckAuthor(ctx, pipeline_id) {
+		r.Response.RedirectTo("/forbidden")
+		return nil, err
+	}
+
 	var job_id int = r.Get("job_id").Int()
 
 	tasks := service.Cicd.GetListJobTasks(ctx, pipeline_id, job_id)
@@ -213,9 +217,12 @@ func (c *ControllerV1) CicdLogGetOne(ctx context.Context, req *CicdLogGetOneReq)
 	r := g.RequestFromCtx(ctx)
 
 	var pipeline_id int = r.Get("pipeline_id").Int()
-	// if !service.CheckAuthor(r.Context(), pipeline_id) {
-	// 	r.Response.WriteStatus(http.StatusForbidden)
-	// }
+
+	if !service.Comm.CheckAuthor(ctx, pipeline_id) {
+		r.Response.RedirectTo("/forbidden")
+		return nil, err
+	}
+
 	var log_id int = r.Get("task_id").Int()
 	outputObj, err := service.Cicd.GetOneLog(ctx, pipeline_id, log_id)
 	if err != nil {
@@ -236,9 +243,12 @@ func (c *ControllerV1) JobLogGetOne(ctx context.Context, req *JobLogGetOneReq) (
 	r := g.RequestFromCtx(ctx)
 
 	var pipeline_id int = r.Get("pipeline_id").Int()
-	// if !service.CheckAuthor(r.Context(), pipeline_id) {
-	// 	r.Response.WriteStatus(http.StatusForbidden)
-	// }
+
+	if !service.Comm.CheckAuthor(ctx, pipeline_id) {
+		r.Response.RedirectTo("/forbidden")
+		return nil, err
+	}
+
 	var job_id int = r.Get("job_id").Int()
 	outputObj, err := service.Cicd.JobGetLog(ctx, pipeline_id, job_id)
 	if err != nil {
@@ -259,9 +269,12 @@ func (c *ControllerV1) JobRunGetOne(ctx context.Context, req *JobRunGetOneReq) (
 	r := g.RequestFromCtx(ctx)
 
 	var pipeline_id int = r.Get("pipeline_id").Int()
-	// if !service.CheckAuthor(r.Context(), pipeline_id) {
-	// 	r.Response.WriteStatus(http.StatusForbidden)
-	// }
+
+	if !service.Comm.CheckAuthor(ctx, pipeline_id) {
+		r.Response.RedirectTo("/forbidden")
+		return nil, err
+	}
+
 	var job_id int = r.Get("job_id").Int()
 
 	jobURL := service.Cicd.GetAgentByPipeline(ctx, pipeline_id) + fmt.Sprintf("/agent/job/%d/run", job_id)
@@ -289,9 +302,12 @@ func (c *ControllerV1) JobAbortGetOne(ctx context.Context, req *JobAbortGetOneRe
 	r := g.RequestFromCtx(ctx)
 
 	var pipeline_id int = r.Get("pipeline_id").Int()
-	// if !service.CheckAuthor(r.Context(), pipeline_id) {
-	// 	r.Response.WriteStatus(http.StatusForbidden)
-	// }
+
+	if !service.Comm.CheckAuthor(ctx, pipeline_id) {
+		r.Response.RedirectTo("/forbidden")
+		return nil, err
+	}
+
 	var job_id int = r.Get("job_id").Int()
 
 	jobURL := service.Cicd.GetAgentByPipeline(ctx, pipeline_id) + fmt.Sprintf("/agent/job/%d/abort", job_id)
