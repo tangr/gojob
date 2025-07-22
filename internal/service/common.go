@@ -60,7 +60,7 @@ func stringToSlice(str string) []string {
 	var newslice []string = make([]string, 0)
 	err := json.Unmarshal([]byte(str), &newslice)
 	if err != nil {
-		g.Log().Errorf(ctx, "stringToSlice: ", err)
+		g.Log().Errorf(ctx, "stringToSlice: %s", err)
 	}
 	return newslice
 }
