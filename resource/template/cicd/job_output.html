@@ -35,7 +35,7 @@
         </div>
 
         <div class="ui divider"></div>
-        <p class="taskoutput" style="white-space: pre-wrap;"></p>
+        <p class="taskoutput" style="white-space: pre-wrap; word-break: break-all;"></p>
         <div class="ui divider"></div>
         <div class="taskstatus2" id="taskstatusbuttom"></div>
 
@@ -89,7 +89,6 @@
 
 </div>
 
-
 <script type="text/javascript">
     $('.ui.dropdown').dropdown();
 
@@ -116,7 +115,7 @@
           success: function(res) {
             var taskstatus = res.status;
             $('.taskstatus1').text(taskstatus);
-            $('.taskoutput').text(res.output);
+            $('.taskoutput').html(DOMPurify.sanitize(marked.parse(res.output)));
             $('.taskstatus2').text(taskstatus);
 
             if (taskstatus == 'running') {
@@ -136,7 +135,7 @@
                     success: function(res) {
                       var taskstatus = res.status;
                       $('.taskstatus1').text(taskstatus);
-                      $('.taskoutput').text(res.output);
+                      $('.taskoutput').html(DOMPurify.sanitize(marked.parse(res.output)));
                       // $('.taskstatus2').html(taskstatus + ' <i class="spinner loading icon"></i>');
                       if (oldtaskstatus == "") {
                         $('#taskstatusbuttom').html(taskstatus + ' <i class="ui active inline tiny loader"></i>');
