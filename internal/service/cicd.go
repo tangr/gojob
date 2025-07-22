@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"gojob/internal/dao"
 	"strings"
@@ -331,4 +332,26 @@ func (s *cicdService) JobGetLog(ctx context.Context, pipeline_id int, job_id int
 		g.Log().Error(ctx, err)
 	}
 	return output, nil
+}
+
+func (s *cicdService) JobGetEnv(ctx context.Context, pipeline_id int, job_id int) string {
+	jobScript := &JobScriptValue{}
+	job_map := g.Map{"id": job_id, "pipeline_id": pipeline_id}
+	script, err := dao.CicdJob.Ctx(ctx).
+		Fields("script").Where(job_map).Value()
+	if err != nil {
+		g.Log().Error(ctx, err)
+	}
+	script_byte := script.Bytes()
+	err = json.Unmarshal(script_byte, jobScript)
+	if err != nil {
+		g.Log().Error(ctx, err)
+	}
+	jobEnvs := jobScript.Envs
+	jobEnvs_byte, err := json.Marshal(jobEnvs)
+	if err != nil {
+		g.Log().Error(ctx, err)
+	}
+	jobEnvs_json := string(jobEnvs_byte)
+	return jobEnvs_json
 }

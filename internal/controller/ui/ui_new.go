@@ -132,13 +132,16 @@ type CicdLogGetOneReq struct {
 }
 
 type JobRunGetOneReq struct {
-	g.Meta `path:"/jobs/{pipeline_id}/{job_id}/run" tags:"ui" method:"get" summary:"JobLogGetOneReq"`
+	g.Meta `path:"/jobs/{pipeline_id}/{job_id}/run" tags:"ui" method:"get" summary:"JobRunGetOneReq"`
 }
 type JobLogGetOneReq struct {
 	g.Meta `path:"/jobs/{pipeline_id}/{job_id}/log" tags:"ui" method:"get" summary:"JobLogGetOneReq"`
 }
 type JobAbortGetOneReq struct {
 	g.Meta `path:"/jobs/{pipeline_id}/{job_id}/abort" tags:"ui" method:"get" summary:"JobAbortGetOneReq"`
+}
+type JobEnvGetOneReq struct {
+	g.Meta `path:"/jobs/{pipeline_id}/{job_id}/env" tags:"ui" method:"get" summary:"JobEnvGetOneReq"`
 }
 
 // type CicdGetListPkgsReq struct {
@@ -193,6 +196,7 @@ type IUiV1 interface {
 	JobRunGetOne(ctx context.Context, req *JobRunGetOneReq) (res *ghttp.Response, err error)
 	JobLogGetOne(ctx context.Context, req *JobLogGetOneReq) (res *ghttp.Response, err error)
 	JobAbortGetOne(ctx context.Context, req *JobAbortGetOneReq) (res *ghttp.Response, err error)
+	JobEnvGetOne(ctx context.Context, req *JobEnvGetOneReq) (res *ghttp.Response, err error)
 }
 
 type ControllerV1 struct{}

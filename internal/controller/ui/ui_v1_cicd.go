@@ -60,7 +60,7 @@ func (c *ControllerV1) CicdGetOne(ctx context.Context, req *CicdGetOneReq) (resp
 		"pipeline_id":   pipeline_id,
 		"jobs":          jobs,
 		"page":          page2,
-		"envurl":        "/v1/" + fmt.Sprint(pipeline_id) + "/",
+		"envurl":        "/jobs/" + fmt.Sprint(pipeline_id) + "/",
 		"page_name":     pipeline.PipelineName,
 
 		// "url":           "/pipelines/",
@@ -261,6 +261,23 @@ func (c *ControllerV1) JobLogGetOne(ctx context.Context, req *JobLogGetOneReq) (
 	}
 
 	r.Response.WriteExit(outputObj)
+
+	return nil, nil
+}
+
+func (c *ControllerV1) JobEnvGetOne(ctx context.Context, req *JobEnvGetOneReq) (response *ghttp.Response, err error) {
+	r := g.RequestFromCtx(ctx)
+
+	var pipeline_id int = r.Get("pipeline_id").Int()
+
+	if !service.Comm.CheckAuthor(ctx, pipeline_id) {
+		r.Response.RedirectTo("/forbidden")
+		return nil, err
+	}
+
+	var job_id int = r.Get("job_id").Int()
+	envs := service.Cicd.JobGetEnv(ctx, pipeline_id, job_id)
+	r.Response.WriteExit(envs)
 
 	return nil, nil
 }
