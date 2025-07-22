@@ -26,7 +26,13 @@ var (
 				group.Bind(
 					ui.NewV1(),
 				)
+				group.GET("/forbidden", func(r *ghttp.Request) {
+					r.Response.WriteTpl("users/forbidden.html", g.Map{
+						"page_name": "forbidden",
+					})
+				})
 			})
+
 			s.Group("/api", func(group *ghttp.RouterGroup) {
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
 				group.Bind(
