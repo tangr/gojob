@@ -46,9 +46,10 @@ func (c *ControllerV1) CicdGetOne(ctx context.Context, req *CicdGetOneReq) (resp
 		return nil, err
 	}
 
-	page := r.GetPage(totalSize, 10)
+	page1 := r.GetPage(totalSize, 10)
+	page2 := service.Cicd.PageContent(page1)
 
-	err = r.Response.WriteTpl("cicd/show.html", g.Map{
+	params := g.Map{
 		"url":           "/jobs/" + fmt.Sprint(pipeline_id),
 		"body_url":      "/jobs/" + fmt.Sprint(pipeline_id) + "/body",
 		"newJobUrl":     "/jobs/" + fmt.Sprint(pipeline_id) + "/newjob",
@@ -56,7 +57,7 @@ func (c *ControllerV1) CicdGetOne(ctx context.Context, req *CicdGetOneReq) (resp
 		"pipeline_name": pipeline.PipelineName,
 		"pipeline_id":   pipeline_id,
 		"jobs":          jobs,
-		"page":          service.Cicd.PageContent(page),
+		"page":          page2,
 		"envurl":        "/v1/" + fmt.Sprint(pipeline_id) + "/",
 		"page_name":     pipeline.PipelineName,
 
@@ -66,7 +67,9 @@ func (c *ControllerV1) CicdGetOne(ctx context.Context, req *CicdGetOneReq) (resp
 		// "pipeline_id": pipeline_id,
 		// "agents": agents,
 		// "groups": groups,
-	})
+	}
+
+	err = r.Response.WriteTpl("cicd/show.html", params)
 	return nil, err
 }
 
