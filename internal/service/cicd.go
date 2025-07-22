@@ -6,6 +6,7 @@ import (
 	"gojob/internal/dao"
 	"strings"
 
+	"github.com/gogf/gf/v2/encoding/ghtml"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
@@ -82,14 +83,16 @@ func (s *cicdService) GetListJobs(ctx context.Context, pipeline_id int, pageInde
 		Fields("id,pipeline_id,agent_id,job_type,job_status,comment,author,created_at").
 		Where("pipeline_id", pipeline_id).
 		Order("id DESC").
-		Limit(pageSize).
-		Offset(offset).
+		Limit(offset, pageSize).
 		Scan(&jobs)
 	if err != nil {
 		return nil, 0, gerror.Wrap(err, "get jobs failed")
 	}
 
-	totalSize = len(jobs)
+	totalSize, err = dao.CicdJob.Ctx(ctx).Fields("id").Where("pipeline_id=", pipeline_id).Count()
+	if err != nil {
+		g.Log().Error(ctx, "GetListJobs totalSize:", err)
+	}
 
 	return jobs, totalSize, nil
 }
@@ -100,7 +103,7 @@ func (s *cicdService) PageContent(page *gpage.Page) string {
 	pageStr := page.PrevPage()
 	pageStr += fmt.Sprint(page.CurrentPage)
 	pageStr += page.NextPage()
-	return pageStr
+	return ghtml.SpecialCharsDecode(pageStr)
 }
 
 func (s *cicdService) CreateJob(ctx context.Context, pipeline_id int, envs map[string]interface{}, username string) (int64, error) {
