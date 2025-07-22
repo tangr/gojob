@@ -198,7 +198,7 @@ func (s *pipelineService) GetGroupId(pipeline_id int) int {
 	group_id, err := dao.CicdPipeline.Ctx(ctx).
 		Fields("group_id").Where("id=", pipeline_id).Value()
 	if err != nil {
-		g.Log().Errorf(ctx, "GetGroupId: ", err)
+		g.Log().Errorf(ctx, "GetGroupId: %s", err)
 	}
 	return group_id.Int()
 }
